@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>29.70 - Thông tin chi tiết người dùng</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body onload="onPageLoading()">
+    <div class="container">
+        <div class="form-group p-2" >
+            <a href="Task29.60.html" class="font-weight-bold">QUAY LẠI</a>
+
+        </div>
+
+        <h1 class="text-center">
+            Thông tin chi tiết người dùng
+        </h1>
+
+        <div class="form-group">
+            <label for="">ID:</label>
+            <input type="text" class="form-control" id="user-id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Firstname:</label>
+            <input type="text" class="form-control" id="user-firstname" readonly>
+        </div>
+        <div class="form-group">
+            <label>Lastname:</label>
+            <input type="text" class="form-control" id="user-lastname" readonly>
+        </div>
+        <div class="form-group">
+            <label>Country:</label>
+            <input type="text" class="form-control" id="user-country" readonly>
+        </div>
+        <div class="form-group">
+            <label>Subject:</label>
+            <input type="text" class="form-control" id="user-subject" readonly>
+        </div>
+        <div class="form-group">
+            <label>Customer Type:</label>
+            <input type="text" class="form-control" id="user-customertype" readonly>
+        </div>
+        <div class="form-group">
+            <label>Register Status:</label>
+            <input type="text" class="form-control" id="user-registerstatus" readonly>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    "use strict";
+
+    // REGION 1 - Khai báo biến, hằng số toàn cục
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "http://203.171.20.210:8080/devcamp-register-java-api/users";
+
+    // REGION 2 - Gán / thực thi sự kiện cho các elements
+
+    // REGION 3 - Khai báo các hàm xử lý sự kiện
+
+    function onPageLoading(){
+        "use strict";
+        var vUrlString = window.location.href;
+        var vUrl = new URL(vUrlString);
+
+        var vUserId = vUrl.searchParams.get("id");
+        console.log("User id nhận được là: " + vUserId);
+
+        if (vUserId == null || vUserId == "" || vUserId == undefined) {
+            alert("Không tìm thấy người dùng");
+            window.location.href = "Task29.60.html";
+            return;
+        }
+
+        var vXmlRequest = new XMLHttpRequest();
+        callApiGetUserById(vXmlRequest, vUserId);
+
+        vXmlRequest.onreadystatechange = function(){
+            if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_OK) {
+                console.log(vXmlRequest.responseText);
+                showUserDetailOnForm(vXmlRequest);                
+            }
+        }
+    }
+
+    // REGION 4 - Các hàm dùng chung cho toàn bộ chương trình
+    function callApiGetUserById(paramXmlRequest, paramUserId) {
+        "use strict";
+        var vUrl = gBASE_URL + "/" + paramUserId;
+        paramXmlRequest.open("GET", vUrl, true);
+        paramXmlRequest.send();
+    }
+
+    function showUserDetailOnForm(paramXmlHttp){
+        "use strict";
+        // Chuyển JSON thành object
+        var vUser = JSON.parse(paramXmlHttp.responseText);
+
+        // Điền dữ liệu vào các input trên form
+        document.getElementById("user-id").value = vUser.id;
+        document.getElementById("user-firstname").value = vUser.firstname;
+        document.getElementById("user-lastname").value = vUser.lastname;
+        document.getElementById("user-country").value = vUser.country;
+        document.getElementById("user-subject").value = vUser.subject;
+        document.getElementById("user-customertype").value = vUser.customerType;
+        document.getElementById("user-registerstatus").value = vUser.registerStatus;
+    }
+
+</script>
+
+
