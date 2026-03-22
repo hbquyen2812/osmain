@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find d:OS -type d -name *alg* -o -type d -name *task*)",
+      "Bash(find d:OS -type d -name *task* -o -type d -name *Task*)",
+      "Bash(find d:OS -type f \\\\\\(-name *.js -o -name *.html -o -name *.ts -o -name *.cpp -o -name *.java \\\\\\))",
+      "Bash(grep -r \"Tower of Hanoi\\\\|N-Queens\\\\|merge sort\\\\|backtrack\" d:OS --include=*.js --include=*.html)"
+    ]
+  }
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskAlgs4.30 - Recursive Algorithms</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <style>
+        .result-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body onload="runAll()">
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">TaskAlgs4.30 - 3 Recursive Algorithms</h1>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">1. Backtracking - N-Queens (N = 5)</h2>
+            </div>
+            <div class="card-body">
+                <p>Dat 5 quan hau len ban co 5x5 sao cho khong co 2 quan hau nao tan cong nhau.</p>
+                <div id="nQueensResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h2 class="mb-0">2. Divide and Conquer - Merge Sort [6, 8, 9, 1]</h2>
+            </div>
+            <div class="card-body">
+                <p>Sap xep mang [6, 8, 9, 1] bang thuat toan Merge Sort (chia de tri).</p>
+                <div id="mergeSortResult" class="result-box"></div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                <h2 class="mb-0">3. Tower of Hanoi (N = 4)</h2>
+            </div>
+            <div class="card-body">
+                <p>Di chuyen 4 dia tu cot A sang cot C, su dung cot B lam trung gian.</p>
+                <div id="hanoiResult" class="result-box"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="recursive.js"></script>
+</body>
+</html>
