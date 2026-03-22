@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recursive Algorithms</title>
+</head>
+<body>
+    <h1>Recursive Algorithms</h1>
+
+    <h2>Backtracking (N-Queens Problem)</h2>
+    <p>Enter the size of the board (N):</p>
+    <input type="number" id="nQueens" placeholder="e.g., 4">
+    <button onclick="solveNQueens()">Solve N-Queens</button>
+    <p>Solution: <span id="nQueensResult"></span></p>
+
+    <h2>Divide and Conquer (Merge Sort)</h2>
+    <p>Enter numbers to sort (comma-separated):</p>
+    <input type="text" id="mergeSortInput" placeholder="e.g., 5,3,8,4,2">
+    <button onclick="runMergeSort()">Sort</button>
+    <p>Sorted Result: <span id="mergeSortResult"></span></p>
+
+    <h2>Tower of Hanoi</h2>
+    <p>Enter the number of disks:</p>
+    <input type="number" id="hanoiDisks" placeholder="e.g., 3">
+    <button onclick="solveHanoi()">Solve Hanoi</button>
+    <p>Steps: <span id="hanoiResult"></span></p>
+
+    <script src="recursive.js"></script>
+</body>
+</html>
