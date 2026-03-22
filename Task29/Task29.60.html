@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 29.60</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body onload="onPageLoading()">
+    <div class="container jumpbotron">
+        <h1 class="text-center">Danh sách người dùng đăng ký</h1>
+        <table id="user-table" class="table table-bordered table-striped table-hover">
+            <thead>
+                <td>ID</td>
+                <td>Firstname</td>
+                <td>Lastname</td>
+                <td>Country</td>
+                <td>Subject</td>
+                <td>Action</td>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+        </table>
+    </div>
+    
+</body>
+</html>
+
+<script>
+    "use strict";
+
+    // region 1 - khai báo toàn cục
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "http://203.171.20.210:8080/devcamp-register-java-api/users";
+    const gEND_OF_ROW_COL = -1;
+
+
+
+    // region 2 - gán (thực thi sự kiện cho các elements)
+
+    // region 3 - Khai báo các hàm xử lý sự kiện
+    function onPageLoading(){
+        "use strict";
+        // gọi server
+        var vXHMLRequest = new XMLHttpRequest();
+        callApiGetUsers(vXHMLRequest);
+        vXHMLRequest.onreadystatechange = function(){
+            if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_OK){
+                showDataOnTable(vXHMLRequest);
+                addListenerEventInfoButton();
+            }
+        }
+    }
+
+    function onClickInfoButton(paramDetailButton){
+        "use strict";
+        var vUserId = paramDetailButton.dataset.id;
+        var vFirstname = paramDetailButton.dataset.firstname;
+        var vLastname = paramDetailButton.dataset.lastname;
+        var vCountry = paramDetailButton.dataset.country;
+        var vSubject = paramDetailButton.dataset.subject;
+        var vCustomerType = paramDetailButton.dataset.customerType;
+        var vRegisterStatus = paramDetailButton.dataset.registerStatus;
+        console.log("Thông tin user");
+        console.log("User id: " + vUserId);
+        console.log("First name: " + vFirstname);
+        console.log("Last name: " + vLastname);
+        console.log("Country: " + vCountry);
+        console.log("Subject: " + vSubject);
+        console.log("Customer type: " + vCustomerType);
+        console.log("Register status: " + vRegisterStatus);
+
+    }
+
+    // region 4 - các hàm cho toàn bộ chương trình
+
+    function callApiGetUsers(paramXmlHttp){
+        "use strict";
+        paramXmlHttp.open("GET", gBASE_URL, true);
+        paramXmlHttp.send();
+    }
+
+    function showDataOnTable(paramXmlHttpUser){
+        "use strict";
+        console.log(paramXmlHttpUser.responseText);
+        // chuyen json qua object
+        var vRespone = JSON.parse(paramXmlHttpUser.responseText);
+        var vTable = document.getElementById("user-table");
+        var vTableBody = vTable.getElementsByTagName("tbody")[0];
+
+        for (var i = 0; i < vRespone.length; i++){
+            var vNewRow = vTableBody.insertRow(gEND_OF_ROW_COL);
+            var vCellMaNguoiDung = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellFirstname = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellLastname = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellCountry = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellSubject = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellCustomerType = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellRegisterStatus = vNewRow.insertCell(gEND_OF_ROW_COL);
+            var vCellUserAction = vNewRow.insertCell(gEND_OF_ROW_COL);
+
+            vCellMaNguoiDung.innerHTML = vRespone[i].id;
+            vCellFirstname.innerHTML = vRespone[i].firstname;
+            vCellLastname.innerHTML = vRespone[i].lastname;
+            vCellCountry.innerHTML = vRespone[i].country;
+            vCellSubject.innerHTML = vRespone[i].subject;
+            vCellCustomerType.innerHTML = vRespone[i].customerType;
+            vCellRegisterStatus.innerHTML = vRespone[i].registerStatus;
+
+            var vDetailButton = document.createElement("button");
+            vDetailButton.className = "info-user btn btn-info";
+            vDetailButton.setAttribute("data-id", vRespone[i].id);
+            vDetailButton.setAttribute("data-firstname", vRespone[i].firstname);
+            vDetailButton.setAttribute("data-lastname", vRespone[i].lastname);
+            vDetailButton.setAttribute("data-country", vRespone[i].country);
+            vDetailButton.setAttribute("data-subject", vRespone[i].subject);
+            vDetailButton.setAttribute("data-customerType", vRespone[i].customerType);
+            vDetailButton.setAttribute("data-registerStatus", vRespone[i].registerStatus);
+            vDetailButton.innerHTML = "Chi tiết";
+            vCellUserAction.appendChild(vDetailButton);
+            
+
+
+        }
+    }
+
+    function addListenerEventInfoButton(){
+        "use strict";
+        var vInfoUserButtons = document.getElementsByClassName("info-user");
+        for (var i = 0; i < vInfoUserButtons.length; i++){
+            vInfoUserButtons[i].addEventListener("click", function(){
+                onClickInfoButton(this);
+            });
+        }
+    }
+
+
+
+</script>
