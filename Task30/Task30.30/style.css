@@ -1,0 +1,123 @@
+/* ===== GLOBAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+}
+
+/* ===== LAYOUT ===== */
+.sign-up {
+    min-height: 100vh;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    background-color: #f9f9f9;
+}
+
+.left h2 {
+    font-family: "Montserrat", sans-serif;
+    color: #2d4a5a;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+/* ===== FORM ===== */
+.form-group label {
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid #d9d9d9;
+    padding: 10px 14px;
+    height: auto;
+}
+
+.form-control::placeholder {
+    color: #aaa;
+    font-size: 12px;
+}
+
+.password-hints {
+    margin-top: 5px;
+}
+
+.password-hints p {
+    color: #8a8a8a;
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+
+/* ===== BUTTON ===== */
+.btn-sign-up {
+    border-radius: 5px;
+    background: #2d4a5a;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.btn-sign-up:hover {
+    background: #1f3845;
+    color: #fff;
+}
+
+/* ===== LOGIN TEXT ===== */
+.login {
+    color: #6b8fa3;
+    font-size: 13px;
+    font-weight: 400;
+    margin-top: 30px;
+}
+
+.login a {
+    color: #2d4a5a;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* ===== RIGHT PANEL ===== */
+.right {
+    background: linear-gradient(135deg, #3a6073, #2d4a5a, #1c3545);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 50px;
+    color: #fff;
+}
+
+.right .quote {
+    font-family: "Montserrat", sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.right .quote-author {
+    font-family: "Open Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 25px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+}

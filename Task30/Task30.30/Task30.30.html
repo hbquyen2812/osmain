@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+
+    <title>Task 30.30</title>
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row sign-up">
+
+            <div class="col-md-5 left">
+                <h2>Let's get you started</h2>
+
+                <form id="form-sign-up">
+                    <div class="form-group">
+                        <label for="input-fullname">Full name</label>
+                        <input type="text" class="form-control" id="input-fullname" placeholder="Adie Tiger" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-email">Email address</label>
+                        <input type="email" class="form-control" id="input-email" placeholder="yourname@email.com" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-password">Create password</label>
+                        <input type="password" class="form-control" id="input-password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" />
+                        <div class="password-hints">
+                            <p>Password must contain a minimum of 8 characters</p>
+                            <p>Password must contain at least 1 symbol e.g. @,!</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-block btn-sign-up">Sign Up</button>
+                </form>
+
+                <p class="text-center login">
+                    Already a user?
+                    <a href="#">Login</a>
+                </p>
+            </div>
+
+            <div class="col-md-7 right">
+                <p class="quote">&ldquo;Creativity is intelligence having fun&rdquo;</p>
+                <p class="quote-author">- Albert Einstein</p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+<script>
+    "use strict";
+    // region 1 - global variables
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_STATUS_CREATED = 201;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "https://62458c222cfed18817229118.mockapi.io/users";
+
+    // region 2 - vung gan su kien
+    var vFormSignUp = document.getElementById("form-sign-up");
+    vFormSignUp.addEventListener("submit", function (e) {
+        e.preventDefault();
+        onBtnSignUpClick();
+    });
+
+    // region 3 - xu ly su kien
+    function onBtnSignUpClick() {
+        "use strict";
+        var vUserSignUp = {
+            fullname: "",
+            email: "",
+            password: "",
+        };
+
+        thuThapDuLieu(vUserSignUp);
+
+        var vKiemTraDuLieu = kiemTraDuLieu(vUserSignUp);
+
+        if (vKiemTraDuLieu) {
+            var vXmlHttp = new XMLHttpRequest();
+            goiAPI(vXmlHttp, vUserSignUp);
+            vXmlHttp.onreadystatechange = function () {
+                if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_CREATED) {
+                    console.log(this.responseText);
+                    xulyDuLieuDangKy(vXmlHttp);
+                }
+            }
+        }
+    }
+
+    // region 4 - cac ham dung chung
+
+    // Buoc 1: Thu thap du lieu
+    function thuThapDuLieu(paramUserSignUp) {
+        "use strict";
+        paramUserSignUp.fullname = document.getElementById("input-fullname").value.trim();
+        paramUserSignUp.email = document.getElementById("input-email").value.trim();
+        paramUserSignUp.password = document.getElementById("input-password").value.trim();
+    }
+
+    // Buoc 2: Kiem tra du lieu
+    function kiemTraDuLieu(paramUserSignUp) {
+        "use strict";
+        var vRes = true;
+        if (paramUserSignUp.fullname == "") {
+            alert("Fullname is empty");
+            vRes = false;
+        }
+        if (!validateEmail(paramUserSignUp.email)) {
+            alert("Email is not valid");
+            vRes = false;
+        }
+        if (paramUserSignUp.password.length < 8) {
+            alert("Password must contain a minimum of 8 characters");
+            vRes = false;
+        }
+
+        var vSymbolPattern = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!vSymbolPattern.test(paramUserSignUp.password)) {
+            alert("Password must contain at least 1 symbol e.g. @,!");
+            vRes = false;
+        }
+
+        return vRes;
+    }
+
+    function validateEmail(paramEmail) {
+        "use strict";
+        var vEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return vEmailPattern.test(paramEmail);
+    }
+
+    // Buoc 3: Goi API
+    function goiAPI(paramXmlHttp, paramUserSignUp) {
+        "use strict";
+        var vData = JSON.stringify(paramUserSignUp);
+        paramXmlHttp.open("POST", gBASE_URL, true);
+        paramXmlHttp.setRequestHeader("Content-Type", "application/json");
+        paramXmlHttp.send(vData);
+    }
+
+    // Buoc 4: Xu ly du lieu tra ve
+    function xulyDuLieuDangKy(paramXmlHttp) {
+        "use strict";
+        var vSignUpData = paramXmlHttp.responseText;
+        alert("Dang ky thanh cong!");
+        console.log("User data:", vSignUpData);
+    }
+</script>
+
+</html>
