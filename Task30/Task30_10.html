@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 30.10</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body onload="onPageLoading()">
+    <div class="container">
+        <h1 class="text-center">Form Đăng Nhập</h1>
+
+        <form action="" id="form-login">
+            <div class="row">
+                <div class="col-sm-12 groud-control">
+                    <label for="inp-email" class="">Email Address</label>
+                    <input type="text" id="inp-email" class="form-control" placeholder="Enter Email">
+                    <p style="color: #959da0">We'll never share your email with anyone else.</p> 
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 groud-control">
+                    <label for="inp-password" class="">Password</label>
+                    <input type="password" id="inp-password" class="form-control" placeholder="Enter Password">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 groud-control">
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>   
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script>
+    // Vung 1 - Global variables
+    'use strict';
+    /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+    const gREQUEST_STATUS_OK = 200;
+	const gREQUEST_STATUS_CREATED = 201;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "https://62458c222cfed18817229118.mockapi.io/users";
+	const gBASE_URL_CONTACTS = "https://62458c222cfed18817229118.mockapi.io/contacts";
+
+    // Vung 2 - Vung gan
+
+
+    // Vung 3 - Event Handlers
+    function onPageLoading(){
+        var vForm = document.getElementById("form-login");
+        vForm.addEventListener("submit", function(e){
+            e.preventDefault(); // ngan chan submit mac dinh
+            console.log("Ban dang submit form");
+            // tao doi tuong can thu thap du lieu
+            var vObject = {
+                email: "",
+                password: ""
+            };
+            // thu thap du lieu
+            getDataFromInput(vObject);
+            console.log(vObject);
+
+            // kiem tra du lieu thu thap
+            var vCheck = validateData(vObject);
+            console.log(vCheck);
+            
+            if (vCheck){
+                // xu ly ajax
+
+                var vXmlHttpLogin = new XMLHttpRequest();
+                processAjax(vXmlHttpLogin, vObject);
+
+                // hien thi kq
+
+                vXmlHttpLogin.onreadystatechange = function(){
+                    if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_OK){
+                        console.log(vXmlHttpLogin.responseText);
+                        var vObjectInfor = JSON.parse(vXmlHttpLogin.responseText);
+                        displayData(vObjectInfor);
+                    }
+
+                }
+            }
+            
+
+        });
+    }
+    // Vung 4 - Common functions
+
+    function displayData(paramData){
+        "use strict";
+        console.log("Login successfully");
+    }
+
+    function processAjax(paramXmlHttp, paramObject){
+        "use strict";
+        paramXmlHttp.open("GET", gBASE_URL + "?" + paramObject.toString(), true);
+        paramXmlHttp.send();
+    }
+
+    function getDataFromInput(paramObject){
+        "use strict";
+        paramObject.email = document.getElementById("inp-email").value;
+        paramObject.password = document.getElementById("inp-password").value;
+    }
+    
+    function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+}
+
+    function validateData(paramObject){
+        "use strict";
+        var vRes = true;
+        var vEmail = paramObject.email.trim();
+        var vPass = paramObject.password.trim();
+        if (vPass == ""){
+            alert("Password is empty");
+            vRes = false;
+        }
+        if (vEmail == ""){
+            alert("Email is empty");
+            vRes = false;
+        }
+        else{
+            if (!validateEmail(vEmail)){
+                alert("Email is invalid");
+                vRes = false;
+            }
+        }
+        return vRes;
+    }
+
+
+</script>
+
+</html>
