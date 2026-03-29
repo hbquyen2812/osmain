@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+
+    <title>Task 30.40</title>
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="contact-wrapper">
+
+        <div class="left">
+            <h2>Contact Us</h2>
+
+            <form id="form-contact">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="input-name" placeholder="Name" />
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="form-control" id="input-email" placeholder="Email" />
+                </div>
+
+                <div class="form-group">
+                    <textarea class="form-control" id="input-message" placeholder="Write something..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-submit">Submit</button>
+            </form>
+        </div>
+
+        <div class="right">
+            <img src="carveli.png" alt="Carveli" />
+            <span class="brand">CARVELI</span>
+        </div>
+
+    </div>
+</body>
+
+<script>
+    "use strict";
+    // region 1 - global variables
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_STATUS_CREATED = 201;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "https://62458c222cfed18817229118.mockapi.io/contacts";
+
+    // region 2 - vung gan su kien
+    var vFormContact = document.getElementById("form-contact");
+    vFormContact.addEventListener("submit", function (e) {
+        e.preventDefault();
+        onBtnSubmitClick();
+    });
+
+    // region 3 - xu ly su kien
+    function onBtnSubmitClick() {
+        "use strict";
+        var vContact = {
+            name: "",
+            email: "",
+            message: "",
+        };
+
+        thuThapDuLieu(vContact);
+
+        var vKiemTraDuLieu = kiemTraDuLieu(vContact);
+
+        if (vKiemTraDuLieu) {
+            var vXmlHttp = new XMLHttpRequest();
+            goiAPI(vXmlHttp, vContact);
+            vXmlHttp.onreadystatechange = function () {
+                if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_CREATED) {
+                    console.log(this.responseText);
+                    xulyDuLieuContact(vXmlHttp);
+                }
+            }
+        }
+    }
+
+    // region 4 - cac ham dung chung
+
+    // Buoc 1: Thu thap du lieu
+    function thuThapDuLieu(paramContact) {
+        "use strict";
+        paramContact.name = document.getElementById("input-name").value.trim();
+        paramContact.email = document.getElementById("input-email").value.trim();
+        paramContact.message = document.getElementById("input-message").value.trim();
+    }
+
+    // Buoc 2: Kiem tra du lieu
+    function kiemTraDuLieu(paramContact) {
+        "use strict";
+        var vRes = true;
+        if (paramContact.name == "") {
+            alert("Name is empty");
+            vRes = false;
+        }
+        if (!validateEmail(paramContact.email)) {
+            alert("Email is not valid");
+            vRes = false;
+        }
+        if (paramContact.message == "") {
+            alert("Message is empty");
+            vRes = false;
+        }
+        return vRes;
+    }
+
+    function validateEmail(paramEmail) {
+        "use strict";
+        var vEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return vEmailPattern.test(paramEmail);
+    }
+
+    // Buoc 3: Goi API
+    function goiAPI(paramXmlHttp, paramContact) {
+        "use strict";
+        var vData = JSON.stringify(paramContact);
+        paramXmlHttp.open("POST", gBASE_URL, true);
+        paramXmlHttp.setRequestHeader("Content-Type", "application/json");
+        paramXmlHttp.send(vData);
+    }
+
+    // Buoc 4: Xu ly du lieu tra ve
+    function xulyDuLieuContact(paramXmlHttp) {
+        "use strict";
+        var vContactData = paramXmlHttp.responseText;
+        alert("Gui lien he thanh cong!");
+        console.log("Contact data:", vContactData);
+    }
+</script>
+
+</html>
