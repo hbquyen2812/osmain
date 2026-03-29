@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Task30.20</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row sign-up">
+
+            <div class="col-md-6 left">
+                <h2>Create a free account</h2>
+
+                <form id="form-sign-up">
+                    <div class="form-group">
+                        <label for="input-fullname">Name</label>
+                        <input type="text" class="form-control" id="input-fullname" placeholder="Your name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-username">Username</label>
+                        <input type="text" class="form-control" id="input-username" placeholder="Username" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-password">Password</label>
+                        <input type="password" class="form-control" id="input-password" placeholder="Password" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-confirm-password">Confirm Password</label>
+                        <input type="password" class="form-control" id="input-confirm-password" placeholder="Password" />
+                    </div>
+
+                    <button type="submit" class="btn btn-block btn-sign-up">Sign up</button>
+
+                    <p class="text-center agree">
+                        By signing up you agree to our 
+                        <a href="#">Terms of Service</a> and 
+                        <a href="#">Privacy Policy</a>
+                    </p>
+                </form>
+
+                <p class="text-center login">
+                    Already have an account?
+                    <a href="#">Login</a>
+                </p>
+            </div>
+
+            <div class="col-md-6 right">
+                <img src="images/patterns-geometricos.png" class="image-fluid" />
+            </div>
+
+        </div>
+    </div>
+</body>
+
+<script>
+    "use strict";
+     // region 1 - global varibales
+    const gREQUEST_STATUS_OK = 200;
+	const gREQUEST_STATUS_CREATED = 201;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+    const gBASE_URL = "https://62458c222cfed18817229118.mockapi.io/users";
+	const gBASE_URL_CONTACTS = "https://62458c222cfed18817229118.mockapi.io/contacts";
+
+     // region 2 - vung gan su kien 
+     var vFormSignUp = document.getElementById("form-sign-up");
+     vFormSignUp.addEventListener("submit", function (e) {
+        e.preventDefault();
+        onBtnSignUpClick();
+     });
+
+
+     // region 3 - xu ly su kien
+
+     function onBtnSignUpClick(){
+        "use strict";
+        var vUserSignUp = {
+            fullname: "",
+            username: "",
+            password: "",
+        };
+
+        thuThapDuLieu(vUserSignUp);
+
+        var vKiemTraDuLieu = kiemTraDuLieu(vUserSignUp);
+
+        if (vKiemTraDuLieu){
+            var vXmlHttp = new XMLHttpRequest();
+            goiAPI(vXmlHttp, vUserSignUp);
+            vXmlHttp.onreadystatechange = function(){
+                if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_CREATED){
+                    console.log(this.responseText);
+                    xulyDuLieuDangKy(vXmlHttp);
+                }
+            }
+        }
+
+
+        
+     }
+
+     // region 4 - cac ham dung chung
+
+     function thuThapDuLieu(paramUserSignUp){
+        "use strict";
+        paramUserSignUp.fullname = document.getElementById("input-fullname").value.trim();
+        paramUserSignUp.username = document.getElementById("input-username").value.trim();
+        paramUserSignUp.password = document.getElementById("input-password").value.trim();
+     }
+
+     function kiemTraDuLieu(paramUserSignUp){
+        "use strict";
+        var vRes = true;
+        if (paramUserSignUp.fullname == ""){
+            alert("Fullname is empty");
+            vRes = false;
+        }
+        if (paramUserSignUp.username == ""){
+            alert("Username is empty");
+            vRes = false;
+        }
+        if (paramUserSignUp.password.length < 6){
+            alert("Password is too short");
+            vRes = false;
+        }
+
+        var vInputConfirmPassword = document.getElementById("input-confirm-password").value.trim();
+        if (vInputConfirmPassword != paramUserSignUp.password){
+            alert("Password is not match");
+            vRes = false;
+        }
+
+        return vRes;
+     }
+
+     function goiAPI(paramXmlHttp, paramUserSignUp){
+        "use strict";
+        var vData = JSON.stringify(paramUserSignUp);
+        paramXmlHttp.open("POST", gBASE_URL, true);
+        paramXmlHttp.send(vData);
+     }
+
+     function xulyDuLieuDangKy(paramXmlHttp){
+        "use strict";
+        var vSignUpData = paramXmlHttp.responseText;
+        alert("Dang ky thanh cong");
+     }
+
+</script>
+
+</html>
