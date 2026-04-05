@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load all orders - Danh sách đơn hàng</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body onload="onPageLoading()">
+    <div class="container-fluid pt-4">
+        <h2 class="text-center pb-3">Danh sách đơn hàng</h2>
+        <table class="table text-center table-striped" id="table-order">
+            <thead>
+                <tr>
+                    <th scope="col">Order Code</th>
+                    <th scope="col">Kích cỡ combo</th>
+                    <th scope="col">Loại pizza</th>
+                    <th scope="col">Nước uống</th>
+                    <th scope="col">Thành tiền</th>
+                    <th scope="col">Họ và tên</th>
+                    <th scope="col">Số điện thoại</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        "use strict";
+        /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+        const gREQUEST_STATUS_OK = 200;
+        const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+        const gCOL_ORDER_CODE = 0;
+        const gCOL_COMBO_SIZE = 1;
+        const gCOL_PIZZA_TYPE = 2;
+        const gCOL_DRINK = 3;
+        const gCOL_TOTAL_PRICE = 4;
+        const gCOL_CUSTOMER_NAME = 5;
+        const gCOL_CUSTOMER_PHONE = 6;
+        const gCOL_ORDER_STATUS = 7;
+        const gCOL_DETAIL = 8;
+
+        /*** REGION 2 - Vùng gán / thực thi sự kiện cho các elements */
+
+
+        /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+        // Hàm thực hiện khi load trang
+        function onPageLoading() {
+            getAllOrders();
+        }
+
+        function onBtnDetailClick(paramBtnDetail) {
+            var orderId = paramBtnDetail.dataset.id;
+            var orderCode = paramBtnDetail.dataset.code;
+
+            console.log("", )
+
+            alert("Bạn vừa click vào nút chi tiết của đơn hàng có id là: " + orderId + " và order code là: " + orderCode);
+        }
+
+        /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+        // Hàm thực hiện việc load all orders từ server và load vào table
+        function getAllOrders() {
+            /**
+           * Chia để trị - 04 bước cố gắng thành 04 functions riêng biệt
+           */
+            // B1: Thu thập dữ liệu (trong bài này bước này ko cần)
+            // B2: Validate dữ liệu (trong bài này bước này ko cần)
+            // B3: Thực hiện việc gọi API từ server Server
+            var vXmlHttpGetAllOrders = new XMLHttpRequest();
+            callApiToGetAllOrders(vXmlHttpGetAllOrders);
+
+            // B4: Xử lý trên front-end khi request xử lý xong và trả về response thành công
+            vXmlHttpGetAllOrders.onreadystatechange = function () {
+                if (this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK && this.status == gREQUEST_STATUS_OK) {
+                    loadOrderToTable(vXmlHttpGetAllOrders);
+                }
+            }
+        }
+
+        // hàm gọi api để lấy all orders
+        function callApiToGetAllOrders(paramXMLHttpGetAllOrders) {
+            const vBaseUrl = "http://203.171.20.210:8080/devcamp-pizza365/orders";
+            paramXMLHttpGetAllOrders.open("GET", vBaseUrl, true);
+            paramXMLHttpGetAllOrders.send();
+        }
+
+        // input: xml http request đã đươc trả lời
+        // ouptut/end: dữ liệu hiên thi trên bảng
+        function loadOrderToTable(paramXMLHttpAllOrder) {
+            //CODE Ở ĐÂY ĐỂ LOAD DATA VÀO TABLE
+
+            var vOrders = JSON.parse(paramXMLHttpAllOrder.responseText);
+
+            var vOrderTable = document.getElementById("table-order");
+            var vOrderTableBody = vOrderTable.getElementsByTagName("tbody")[0];
+
+            for (var i = 0; i < vOrders.length; i++) {
+                var newRow = vOrderTableBody.insertRow(-1);
+
+                var cellOrderCode = newRow.insertCell(gCOL_ORDER_CODE);
+                var cellComboSize = newRow.insertCell(gCOL_COMBO_SIZE);
+                var cellPizzaType = newRow.insertCell(gCOL_PIZZA_TYPE);
+                var cellDrink = newRow.insertCell(gCOL_DRINK);
+                var cellTotalPrice = newRow.insertCell(gCOL_TOTAL_PRICE);
+                var cellCustomerName = newRow.insertCell(gCOL_CUSTOMER_NAME);
+                var cellCustomerPhone = newRow.insertCell(gCOL_CUSTOMER_PHONE);
+                var cellOrderStatus = newRow.insertCell(gCOL_ORDER_STATUS);
+                var cellDetail = newRow.insertCell(gCOL_DETAIL);
+
+                cellOrderCode.innerHTML = vOrders[i].orderCode;
+                cellComboSize.innerHTML = vOrders[i].comboSize;
+                cellPizzaType.innerHTML = vOrders[i].pizzaType;
+                cellDrink.innerHTML = vOrders[i].drink;
+                cellTotalPrice.innerHTML = vOrders[i].totalPrice;
+                cellCustomerName.innerHTML = vOrders[i].customerName;
+                cellCustomerPhone.innerHTML = vOrders[i].customerPhone;
+                cellOrderStatus.innerHTML = vOrders[i].orderStatus;
+                
+                var detailButton = document.createElement("button");
+                detailButton.innerHTML = "Xem chi tiết";
+                detailButton.className = "btn btn-info";
+
+                detailButton.setAttribute("data-id", vOrders[i].id);
+                detailButton.setAttribute("data-code", vOrders[i].orderCode);
+
+                detailButton.addEventListener("click", function() {
+                    onBtnDetailClick(this);
+                });
+
+                cellDetail.appendChild(detailButton);
+
+
+
+
+            }
+
+            console.log(paramXMLHttpAllOrder.responseText);
+
+        }
+
+    </script>
+</body>
+
+</html>
