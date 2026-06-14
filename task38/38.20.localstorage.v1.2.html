@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>You've Been Here</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+    <div class="container jumbotron">
+        <p>You've Been Here <span id="visits-element">0</span> Times</p>
+
+        <button id="btn-clear" class="btn btn-success">Clear</button>
+    </div>
+
+    <script>
+        "use strict";
+        $(document).ready(function () {
+            /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+
+            /*** REGION 2 - Vùng gán / thực thi sự kiện cho các elements */
+            visited();
+
+            $("#btn-clear").on('click', function() {
+                clearData();
+            })
+
+            /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+
+            /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+            function visited() {
+                var vVisits = Number(localStorage.getItem('visits'));
+                if (vVisits != null) {
+                    vVisits += 1;
+                } else {
+                    vVisits = 0;
+                }
+                $("#visits-element").html(vVisits);
+                localStorage.setItem('visits', vVisits);
+            }
+            
+            function clearData() {
+                localStorage.clear();
+                $("#visits-element").html("0");
+            }
+        })
+    </script>
+
+
+</body>
+
+</html>
