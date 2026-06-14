@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Item App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .small-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 20px 0 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    <div class="small-container">
+        <h1>New Item App</h1>
+
+        <form id="item-form">
+            <input type="text" id="item-input" placeholder="New item">
+        </form>
+
+        <h2>Items</h2>
+        <ul id="item-list"></ul>
+        <button id="clear-btn">Clear All</button>
+    </div>
+
+    <script>
+        "use strict";
+
+        /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+        var KEY_STORAGE = "items";
+        var gItems = JSON.parse(localStorage.getItem(KEY_STORAGE)) || [];
+
+        /*** REGION 2 - Vùng gán / thực thi hàm xử lý sự kiện cho các elements */
+        renderList();
+
+        $("#item-form").on("submit", onFormSubmit);
+        $("#clear-btn").on("click", onBtnClearClick);
+
+        /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+
+        // Hàm xử lý sự kiện khi submit form (nhấn Enter)
+        function onFormSubmit(e) {
+            e.preventDefault();
+
+            var vValue = $("#item-input").val().trim();
+            if (vValue === "") return;
+
+            gItems.push(vValue);
+            saveToStorage();
+            renderList();
+
+            $("#item-input").val("");
+        }
+
+        // Hàm xử lý sự kiện khi click nút Clear All
+        function onBtnClearClick() {
+            gItems = [];
+            localStorage.removeItem(KEY_STORAGE);
+            renderList();
+        }
+
+        /*** REGION 4 - Common functions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình */
+
+        // Hàm lưu danh sách vào localStorage
+        function saveToStorage() {
+            localStorage.setItem(KEY_STORAGE, JSON.stringify(gItems));
+        }
+
+        // Hàm render lại danh sách items ra giao diện
+        function renderList() {
+            var vList = $("#item-list");
+            vList.empty();
+
+            $.each(gItems, function (index, item) {
+                $("<li/>", { text: item }).appendTo(vList);
+            });
+        }
+    </script>
+</body>
+
+</html>
