@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>User List - REST API</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2 style="text-align: center;">Danh sách người dùng</h2>
+  <table id="user-table" class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Họ</th>
+        <th>Tên</th>
+        <th>Quốc gia</th>
+        <th>Môn học</th>
+        <th>Loại KH</th>
+        <th>Trạng thái</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function() {
+    var gTableUser = null;
+    var gApiUrl = 'https://user-api.onschoolbootcamp.edu.vn/users/';
+
+    onPageLoading();
+
+    function onPageLoading() {
+      gTableUser = $('#user-table').DataTable();
+      bindDetailButtonClickEvent();
+      callApiGetUsers();
+    }
+
+    function callApiGetUsers() {
+      $.ajax({
+        url: gApiUrl,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+          loadDataToTable(response);
+        },
+        error: function(xhr, status, err) {
+          console.error('Gọi API lỗi:', status, err);
+        }
+      });
+    }
+
+    function loadDataToTable(users) {
+      users.forEach(function(user) {
+        gTableUser.row.add([
+          user.id,
+          user.firstname,
+          user.lastname,
+          user.country,
+          user.subject,
+          user.customerType,
+          user.registerStatus,
+          '<button class="btn btn-info btn-sm btn-detail">Chi tiết</button>'
+        ]);
+      });
+      gTableUser.draw();
+    }
+
+    function bindDetailButtonClickEvent() {
+      $('#user-table tbody').on('click', '.btn-detail', function() {
+        var data = gTableUser.row($(this).parents('tr')).data();
+        console.log(data);
+      });
+    }
+  });
+</script>
+</body>
+</html>
