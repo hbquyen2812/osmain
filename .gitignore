@@ -1,1 +1,8 @@
 .claude/
+
+# Documents
+*.pdf
+*.doc
+*.docx
+*.ppt
+*.pptx
