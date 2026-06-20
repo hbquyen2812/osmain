@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>List users</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Import Datatable sau jquery -->
+  <!-- Import them style bootstrap cho datatable -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+  <div class="text-center mt-4 mb-3">
+    <h2>Danh sách người dùng</h2>
+  </div>
+
+  <table id="user-table" class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+  </table>
+</div>
+
+<script>
+  /***
+    * TODO: gán data user vào DataTale, render cột STT và mapping được roleId thành roleName
+
+    *** Gợi ý cho cột STT ***
+    * a) sử dụng phương thức render trong cột STT (định nghĩa ở columnDefs);
+    * b) khai báo 1 biến toàn cục STT và mỗi lần render thì tăng lên 1
+
+    * *** Gợi ý cho cột role ***
+    * a) sử dụng phương thức render trong cột Role (định nghĩa ở columnDefs);
+    * b) khai báo 1 hàm từ roleId trả về roleName, và đc gọi hàm này trong phương thức render ở trên
+  */
+
+  $(document).ready(function() {
+    /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+    var gJsonUser = `{
+      "description": "Data user",
+      "users": [
+      {
+        "id": 2,
+        "username": "quannv",
+        "firstname": "Ngo Van",
+        "lastname": "Quan",
+        "age": 18,
+        "email": "quan@gmail.com",
+        "roleId": 5
+      },
+      {
+        "id": 3,
+        "username": "longdh",
+        "firstname": "Do Hoang",
+        "lastname": "Long",
+        "age": 19,
+        "email": "long@gmail.com",
+        "roleId": 8
+      },
+      {
+        "id": 4,
+        "username": "hiendt",
+        "firstname": "Do Thi",
+        "lastname": "Hien",
+        "age": 29,
+        "email": "hien@gmail.com",
+        "roleId": 11
+      },
+      {
+        "id": 6,
+        "username": "lanht",
+        "firstname": "Ho Thi",
+        "lastname": "Lan",
+        "age": 27,
+        "email": "lan@gmail.com",
+        "roleId": 13
+      }
+    ]
+  }`;
+    var gJsonRole = `{
+      "description": "User Roles",
+      "roles": [
+        {
+          "roleId": 5,
+          "roleName": "Admin"
+        },
+        {
+          "roleId": 8,
+          "roleName": "Manager"
+        },
+        {
+          "roleId": 11,
+          "roleName": "Teacher"
+        },
+        {
+          "roleId": 13,
+          "roleName": "Staff"
+        }
+      ]
+    }`;
+
+    var gListUsers = JSON.parse(gJsonUser);
+    var gListRoles = JSON.parse(gJsonRole);
+
+    // Mảng tên field tương ứng với từng cột trên bảng (theo đúng thứ tự thead)
+    var gNameCol = ["stt", "username", "firstname", "lastname", "email", "age", "roleId", "action"];
+    const gSTT_COL       = 0;
+    const gUSERNAME_COL  = 1;
+    const gFIRSTNAME_COL = 2;
+    const gLASTNAME_COL  = 3;
+    const gEMAIL_COL     = 4;
+    const gAGE_COL       = 5;
+    const gROLE_COL      = 6;   // cột này lấy giá trị roleId, sẽ render lại thành roleName
+    const gACTION_COL    = 7;
+
+    var gSTT = 0; // biến đếm dùng để render số thứ tự
+
+    /*** REGION 2 - Vùng gán / thực thi hàm xử lý sự kiện cho các elements */
+    onPageLoading(); // gọi onPageLoading để tạo bảng
+
+    $(document).on("click", "#user-table .btn-detail", function() {   // gán sự kiện cho các nút btn-detail trong bảng
+      onBtnDetailClick(this);
+    });
+
+    /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+    function onPageLoading() {
+      /* đổ dữ liệu vào table bằng cách khai báo data source ngay từ đầu,
+       * dùng columnDefs + render để xử lý cột STT và cột Role */
+      $('#user-table').DataTable({
+        data: gListUsers.users,
+        columns: [
+          { data: null },                          // STT - chưa có field thật, render ở dưới
+          { data: gNameCol[gUSERNAME_COL] },
+          { data: gNameCol[gFIRSTNAME_COL] },
+          { data: gNameCol[gLASTNAME_COL] },
+          { data: gNameCol[gEMAIL_COL] },
+          { data: gNameCol[gAGE_COL] },
+          { data: gNameCol[gROLE_COL] },           // lấy roleId thô, render lại thành tên
+          { data: null }                           // Action - chưa có field thật
+        ],
+        columnDefs: [
+          {
+            targets: gSTT_COL,
+            className: "text-center",
+            render: renderSTT
+          },
+          {
+            targets: gROLE_COL,
+            className: "text-center",
+            render: renderRoleName
+          },
+          {
+            targets: gACTION_COL,
+            className: "text-center",
+            defaultContent: "<button class='btn btn-primary btn-detail'>Chi tiết</button>"
+          }
+        ]
+      });
+    }
+
+    function onBtnDetailClick(paramElement) {
+      "use strict";
+      var vRowClick = $(paramElement).closest("tr");      // xác định tr chứa nút bấm
+      var vTable = $('#user-table').DataTable();           // truy xuất đến DataTable
+      var vDataRow = vTable.row(vRowClick).data();          // lấy dữ liệu của dòng chứa nút bấm
+      console.log(vDataRow);
+    }
+
+    /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+
+    // render số thứ tự cho cột STT
+    function renderSTT(paramData, paramType, paramRow) {
+      if (paramType === "display") {
+        gSTT++;
+        return gSTT;
+      }
+      return paramData;
+    }
+
+    // render tên role thay vì hiện roleId thô
+    function renderRoleName(paramData, paramType, paramRow) {
+      if (paramType === "display") {
+        return getRoleNameById(paramData); // paramData chính là roleId của dòng đó
+      }
+      return paramData;
+    }
+
+    // tìm roleName tương ứng với 1 roleId trong danh sách role
+    function getRoleNameById(paramRoleId) {
+      var vRole = gListRoles.roles.find(function(role) {
+        return role.roleId === paramRoleId;
+      });
+      return vRole ? vRole.roleName : "Không xác định";
+    }
+
+  });
+
+</script>
+</body>
+</html>
