@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Import Datatable sau jquery -->
+  <!-- Import them style bootstrap cho datatable -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+  <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+
+</head>
+
+<body>
+
+  <div class="container">
+    <h2 style="text-align: center;">Danh sách người dùng</h2>
+
+    <table id="user-table" class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Mã người dùng</th>
+          <th>Firstname</th>
+          <th>Lastname</th>
+          <th>Age</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+  <script>
+    $(document).ready(function () {
+      /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+      var gJsonUser = `{
+      "description": "Data user",
+      "users": [
+        {
+          "userId": 1,
+          "firstname": "Test1",
+          "lastname": "User1",
+          "age": 18
+        },
+        {
+          "userId": 2,
+          "firstname": "Test2",
+          "lastname": "User2",
+          "age": 19
+        },
+        {
+          "userId": 3,
+          "firstname": "Test3",
+          "lastname": "User3",
+          "age": 18
+        },
+        {
+          "userId": 4,
+          "firstname": "Test4",
+          "lastname": "User4",
+          "age": 20
+        },
+        {
+          "userId": 5,
+          "firstname": "Test5",
+          "lastname": "User5",
+          "age": 21
+        },
+        {
+          "userId": 6,
+          "firstname": "Test6",
+          "lastname": "User6",
+          "age": 20
+        }
+      ]
+    }`;
+
+      var gTableUser = null;
+
+
+      /*** REGION 2 - Vùng gán / thực thi hàm xử lý sự kiện cho các elements */
+      onPageLoading();
+
+      /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+      function onPageLoading() {
+        /* add JSON data vào DataTable sử dụng add trực tiếp DataTable row */
+        gTableUser = $('#user-table').DataTable({
+          columnDefs: [
+            { targets: 0, className: 'text-right' },
+            { targets: 3, className: 'text-right' },
+            { targets: 4, className: 'text-center' },
+          ]
+        });
+        loadDataToTable(gJsonUser);
+        bindDetailButtonClickEvent();
+      }
+
+      /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+      function loadDataToTable() {
+        var oData = JSON.parse(gJsonUser);
+        oData.users.forEach(function (user) {
+          gTableUser.row.add([
+            user.userId,
+            user.firstname,
+            user.lastname,
+            user.age,
+            `<button class="btn btn-info btn-sm btn-detail">Chi tiết</button>`
+          ]);
+
+          gTableUser.draw();
+
+        });
+      }
+
+      function bindDetailButtonClickEvent() {
+      $('#user-table tbody').on('click', '.btn-detail', function () {
+        var data = gTableUser.row($(this).parents('tr')).data();
+        console.log(data);
+        //alert(`Mã người dùng: ${data[0]}\nTên: ${data[1]} ${data[2]}\nTuổi: ${data[3]}`);
+      });
+    }
+
+    });
+  </script>
+</body>
+
+</html>
