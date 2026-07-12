@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="text-center">Danh sách người dùng đăng ký</h2>
+        <button class="btn btn-success" id="btn-add-user">Thêm user</button>
+
+        <table class="table table-bordered table-striped table-hover" id="user-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Country</th>
+                    <th>Subject</th>
+                    <th>Customer Type</th>
+                    <th>Register Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+</body>
+
+<script>
+    "use strict";
+    /*** REGION 1 - Global variables */
+    const gBASE_URL = "https://user-api.onschoolbootcamp.edu.vn/users/";
+
+    const gUSER_COLS = ["id", "firstname", "lastname", "country", "subject", "customerType", "registerStatus", "action"];
+
+    const gUSER_ID_COL = 0;
+    const gUSER_ACTION_COL = 7;   // cột cuối là Action
+
+    var gUserTable = $("#user-table").DataTable({
+        columns: [
+            { data: gUSER_COLS[0] },   // id
+            { data: gUSER_COLS[1] },   // firstname
+            { data: gUSER_COLS[2] },   // lastname
+            { data: gUSER_COLS[3] },   // country
+            { data: gUSER_COLS[4] },   // subject
+            { data: gUSER_COLS[5] },   // customerType
+            { data: gUSER_COLS[6] },   // registerStatus
+            { data: gUSER_COLS[gUSER_ACTION_COL] }
+        ],
+        columnDefs: [
+            {
+                targets: gUSER_ACTION_COL,
+                className: "text-center text-nowrap",
+                defaultContent: `
+        <button class="btn btn-sm btn-primary btn-edit-user mr-1">Sửa</button>
+        <button class="btn btn-sm btn-danger btn-delete-user">Xóa</button>`
+            }
+        ]
+    });
+
+    /*** REGION 2 - Event binding */
+    $(document).ready(function () {
+        getAllUsers();
+        $("#user-table").on("click", ".btn-edit-user", function () {
+            onEditUserClick(this);
+        });
+        $("#user-table").on("click", ".btn-delete-user", function () {
+            onDeleteUserClick(this);
+        });
+
+    });
+
+    /*** REGION 3 - Event handlers */
+    function onEditUserClick(paramBtn) {
+        var vUserId = getUserIdFromButton(paramBtn);
+        console.log("Sửa user có Id = " + vUserId);
+    }
+    function onDeleteUserClick(paramBtn) {
+        var vUserId = getUserIdFromButton(paramBtn);
+        console.log("Xóa user có Id = " + vUserId);
+    }
+
+    // hàm dùng chung: từ nút -> tìm dòng -> lấy id
+    function getUserIdFromButton(paramBtn) {
+        var vRow = $(paramBtn).parents("tr");
+        var vRowData = gUserTable.row(vRow).data();
+        return vRowData.id;
+    }
+
+
+    /*** REGION 4 - Common functions */
+    function getAllUsers() {
+        var vXmlHttpObj = new XMLHttpRequest();
+        vXmlHttpObj.open("GET", gBASE_URL, true);
+        vXmlHttpObj.send();
+        vXmlHttpObj.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(vXmlHttpObj.responseText);              // subtask 2: ghi Response ra console
+                var vUserArr = JSON.parse(vXmlHttpObj.responseText); // đổi chuỗi JSON -> mảng object
+                loadDataToTable(vUserArr);                           // đổ vào DataTable
+            }
+        };
+    }
+
+    function loadDataToTable(paramUserArr) {
+        gUserTable.clear();
+        gUserTable.rows.add(paramUserArr);
+        gUserTable.draw();
+    }
+
+</script>
+
+</html>
