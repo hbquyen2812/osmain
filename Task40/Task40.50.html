@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 40.50</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="container">
+        <h2 class="text-center">Danh sách người dùng đăng ký</h2>
+        <button class="btn btn-success" id="btn-add-user">Thêm user</button>
+    </div>
+
+    <!-- Bảng users -->
+    <div class="container">
+        <table class="table table-bordered table-striped table-hover" id="user-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Country</th>
+                    <th>Subject</th>
+                    <th>Customer Type</th>
+                    <th>Register Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+    <!-- Modal Thêm user (KHÔNG có Register Status) -->
+    <div class="modal fade" id="insert-user-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm User</h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" class="form-control" id="input-insert-firstname">
+                        </div>
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" id="input-insert-lastname">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" class="form-control" id="input-insert-subject">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select class="form-control" id="select-insert-country">
+                                <option value="VN">Việt Nam</option>
+                                <option value="USA">USA</option>
+                                <option value="AUS">Australia</option>
+                                <option value="CAN">Canada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Customer Type</label>
+                            <select class="form-control" id="select-insert-customer-type">
+                                <option value="standard">Standard</option>
+                                <option value="gold">Gold</option>
+                                <option value="premium">Premium</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" id="btn-insert-user">Insert user</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sửa user (CÓ Register Status) -->
+    <div class="modal fade" id="update-user-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chi tiết User</h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" class="form-control" id="input-update-firstname">
+                        </div>
+                        <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" id="input-update-lastname">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject</label>
+                            <input type="text" class="form-control" id="input-update-subject">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select class="form-control" id="select-update-country">
+                                <option value="VN">Việt Nam</option>
+                                <option value="USA">USA</option>
+                                <option value="AUS">Australia</option>
+                                <option value="CAN">Canada</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Customer Type</label>
+                            <select class="form-control" id="select-update-customer-type">
+                                <option value="standard">Standard</option>
+                                <option value="gold">Gold</option>
+                                <option value="premium">Premium</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Register Status</label>
+                            <select class="form-control" id="select-update-register-status">
+                                <option value="new">New</option>
+                                <option value="accepted">Accepted</option>
+                                <option value="denied">Denied</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="btn-update-user">Update user</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    "use strict";
+    /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số TOÀN CỤC */
+    const gBASE_URL = "https://user-api.onschoolbootcamp.edu.vn/users/";
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_STATUS_CREATE_OK = 201;
+
+    const gUSER_COLS = ["id", "firstname", "lastname", "country", "subject", "customerType", "registerStatus", "action"];
+    const gUSER_ACTION_COL = 7;
+
+    var gUserId = 0;   // lưu id user đang được sửa
+
+    // khai báo & cấu hình DataTable
+    var gUserTable = $("#user-table").DataTable({
+        order: [[0, "desc"]],   // Id giảm dần -> user mới nhất lên đầu
+        columns: [
+            { data: gUSER_COLS[0] },
+            { data: gUSER_COLS[1] },
+            { data: gUSER_COLS[2] },
+            { data: gUSER_COLS[3] },
+            { data: gUSER_COLS[4] },
+            { data: gUSER_COLS[5] },
+            { data: gUSER_COLS[6] },
+            { data: gUSER_COLS[gUSER_ACTION_COL] }
+        ],
+        columnDefs: [
+            {
+                targets: gUSER_ACTION_COL,
+                className: "text-center text-nowrap",
+                defaultContent: `
+                    <button class="btn btn-sm btn-primary btn-edit-user mr-1">Sửa</button>
+                    <button class="btn btn-sm btn-danger btn-delete-user">Xóa</button>`
+            }
+        ]
+    });
+
+    /*** REGION 2 - Vùng gán / thực thi sự kiện cho các elements */
+    $(document).ready(function () {
+        getAllUsers();   // load bảng khi mở trang
+
+        $("#btn-add-user").on("click", onBtnAddUserClick);        // mở modal Thêm
+        $("#btn-insert-user").on("click", onBtnInsertUserClick);  // nút Insert
+        $("#btn-update-user").on("click", onBtnUpdateUserClick);  // nút Update
+
+        $("#user-table").on("click", ".btn-edit-user", function () {
+            onEditUserClick(this);     // Sửa
+        });
+        $("#user-table").on("click", ".btn-delete-user", function () {
+            onDeleteUserClick(this);   // Xóa
+        });
+    });
+
+    /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */
+    // --- CREATE ---
+    function onBtnAddUserClick() {
+        $("#insert-user-modal").modal("show");
+    }
+    function onBtnInsertUserClick() {
+        var vUserObj = { firstname: "", lastname: "", subject: "", country: "", customerType: "" };
+        // B1: thu thập
+        getInsertUserData(vUserObj);
+        // B2: validate
+        if (validateData(vUserObj)) {
+            // B3: gọi server (B4 nằm trong success)
+            callApiInsertUser(vUserObj);
+        }
+    }
+
+    // --- UPDATE ---
+    function onEditUserClick(paramBtn) {
+        var vRow = $(paramBtn).parents("tr");
+        var vUserData = gUserTable.row(vRow).data();
+        gUserId = vUserData.id;                   // lưu id đang sửa
+        showUserDataToUpdateModal(vUserData);     // đổ dữ liệu lên modal
+        $("#update-user-modal").modal("show");
+    }
+    function onBtnUpdateUserClick() {
+        var vUserObj = { firstname: "", lastname: "", subject: "", country: "", customerType: "", registerStatus: "" };
+        // B1: thu thập
+        getUpdateUserData(vUserObj);
+        // B2: validate
+        if (validateData(vUserObj)) {
+            // B3: gọi server (B4 nằm trong success)
+            callApiUpdateUser(vUserObj);
+        }
+    }
+
+    // --- DELETE (tạm in id ra console) ---
+    function onDeleteUserClick(paramBtn) {
+        var vRow = $(paramBtn).parents("tr");
+        console.log("Xóa user Id = " + gUserTable.row(vRow).data().id);
+    }
+
+    /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung */
+    // ĐỌC danh sách users
+    function getAllUsers() {
+        var vXml = new XMLHttpRequest();
+        vXml.open("GET", gBASE_URL, true);
+        vXml.send();
+        vXml.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == gREQUEST_STATUS_OK) {
+                console.log(vXml.responseText);
+                loadDataToTable(JSON.parse(vXml.responseText));
+            }
+        };
+    }
+    function loadDataToTable(paramArr) {
+        gUserTable.clear();
+        gUserTable.rows.add(paramArr);
+        gUserTable.draw();
+    }
+
+    // THU THẬP dữ liệu form
+    function getInsertUserData(paramObj) {
+        paramObj.firstname = $("#input-insert-firstname").val().trim();
+        paramObj.lastname = $("#input-insert-lastname").val().trim();
+        paramObj.subject = $("#input-insert-subject").val().trim();
+        paramObj.country = $("#select-insert-country").val();
+        paramObj.customerType = $("#select-insert-customer-type").val();
+    }
+    function getUpdateUserData(paramObj) {
+        paramObj.firstname = $("#input-update-firstname").val().trim();
+        paramObj.lastname = $("#input-update-lastname").val().trim();
+        paramObj.subject = $("#input-update-subject").val().trim();
+        paramObj.country = $("#select-update-country").val();
+        paramObj.customerType = $("#select-update-customer-type").val();
+        paramObj.registerStatus = $("#select-update-register-status").val();
+    }
+
+    // ĐỔ dữ liệu user lên modal sửa
+    function showUserDataToUpdateModal(paramObj) {
+        $("#input-update-firstname").val(paramObj.firstname);
+        $("#input-update-lastname").val(paramObj.lastname);
+        $("#input-update-subject").val(paramObj.subject);
+        $("#select-update-country").val(paramObj.country);
+        $("#select-update-customer-type").val(paramObj.customerType);
+        $("#select-update-register-status").val(paramObj.registerStatus);
+    }
+
+    // VALIDATE (dùng chung cho thêm & sửa)
+    function validateData(paramObj) {
+        if (paramObj.firstname === "") { alert("First name không được để trống!"); return false; }
+        if (paramObj.lastname === "") { alert("Last name không được để trống!"); return false; }
+        return true;
+    }
+
+    // GỌI API thêm user (POST)
+    function callApiInsertUser(paramObj) {
+        var vXml = new XMLHttpRequest();
+        vXml.open("POST", gBASE_URL, true);
+        vXml.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        vXml.send(JSON.stringify(paramObj));
+        vXml.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == gREQUEST_STATUS_CREATE_OK || this.status == gREQUEST_STATUS_OK) {
+                    alert("Thêm user thành công!");
+                    resetInsertForm();
+                    $("#insert-user-modal").modal("hide");
+                    getAllUsers();
+                } else {
+                    alert("Thêm thất bại! Mã lỗi: " + this.status);
+                }
+            }
+        };
+    }
+
+    // GỌI API sửa user (PUT)
+    function callApiUpdateUser(paramObj) {
+        var vXml = new XMLHttpRequest();
+        vXml.open("PUT", gBASE_URL + gUserId, true);   // URL kèm id user
+        vXml.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        vXml.send(JSON.stringify(paramObj));
+        vXml.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                if (this.status == gREQUEST_STATUS_OK) {
+                    alert("Cập nhật user thành công!");
+                    $("#update-user-modal").modal("hide");
+                    getAllUsers();
+                } else {
+                    alert("Cập nhật thất bại! Mã lỗi: " + this.status);
+                }
+            }
+        };
+    }
+
+    // XÓA trắng form thêm
+    function resetInsertForm() {
+        $("#input-insert-firstname").val("");
+        $("#input-insert-lastname").val("");
+        $("#input-insert-subject").val("");
+        $("#select-insert-country").val("VN");
+        $("#select-insert-customer-type").val("standard");
+    }
+
+</script>
+
+</html>
