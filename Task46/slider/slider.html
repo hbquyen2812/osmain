@@ -1,0 +1,86 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Slider</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Poppins&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="slider.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="slider.js"></script>
+
+    <style>
+        .slider-box {
+            width: 270px;
+            height: 146.83px;
+            background: #F6F7F8;
+            padding: 20px;
+        }
+
+        .price-span {
+            font-family: 'Poppins', sans-serif;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 27px;
+
+            color: #22262A;
+        }
+
+        .price-div {
+            display: block;
+            height: 23.45px;
+            margin-bottom: 20.39px;
+            margin-top: 20.39px;
+            font-family: 'Lexend Deca', sans-serif;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 22px;
+        }
+
+        .ranger-label {
+            display: inline-block;
+            float: left;
+        }
+
+        .price-label {
+            display: inline-block;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slider-box">
+        <div>
+            <span class="price-span">Prices</span>
+        </div>
+
+        <div class="price-div">
+            <div class="ranger-label">
+                <span>Ranger:</span>
+            </div>
+            <div class="price-label">
+                $ <span id="min-price">0</span>
+                <span class="seperator">-</span>
+                $ <span id="max-price">300</span>
+            </div>
+        </div>
+        <div class="selector">
+            <div class="price-slider">
+                <div id="slider-range" class="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
