@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <!-- Import DataTable Library -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+  
+</head>
+<body>
+<div class="container">
+  <div class="text-center mt-2 mb-2">
+    <h2>F120 - Quản trị Order</h2>
+  </div>
+  <div class="jumbotron container">
+    <div class="row form-group">
+      <div class="col-sm-3">
+        <label for="voucherCodeInput">Loại Pizza</label>
+      </div>
+      <div class="col-sm-6">
+        <select id="gPizzaTypeSelect" class="form-control">
+
+        </select>
+      </div>
+      <div class="col-sm-3">
+        <button id="btn-filter-order" class="btn btn-info">Lọc dữ liệu</button>
+      </div>
+    </div>
+</div>
+
+<div class="container">
+  <table class="table table-bordered table-striped table-hover" id="order-table">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Mã order</th>
+        <th>Loại Pizza</th>
+        <th>Tên khách hàng</th>
+        <th>Ngày đặt hàng</th>
+        <th>Trạng thái</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+
+<script>
+  "use strict";
+  /*** REGION 1 - Global variables - Vùng khai báo biến, hằng số, tham số TOÀN CỤC */
+  // mảng orders
+  var gOrderObjects = [
+      {
+          "id": 2,
+          "orderCode": "12456",
+          "gPizzaTypeId": 20,
+          "customerName": "Do Van Linh",
+          "date": "13/01/2021",
+          "status": "completed"
+      },
+      {
+          "id": 3,
+          "orderCode": "22456",
+          "gPizzaTypeId": 10,
+          "customerName": "Huynh Van Nam",
+          "date": "13/01/2021",
+          "status": "new"
+      },
+      {
+          "id": 4,
+          "orderCode": "22986",
+          "gPizzaTypeId": 15,
+          "customerName": "Do Thi Lan",
+          "date": "14/01/2021",
+          "status": "completed"
+      },
+      {
+          "id": 5,
+          "orderCode": "42086",
+          "gPizzaTypeId": 10,
+          "customerName": "Dinh Chau Ngoc",
+          "date": "14/01/2021",
+          "status": "completed"
+      },
+      {
+          "id": 6,
+          "orderCode": "56086",
+          "gPizzaTypeId": 15,
+          "customerName": "Dang Tien Minh",
+          "date": "15/01/2021",
+          "status": "new"
+      },
+      {
+          "id": 7,
+          "orderCode": "90081",
+          "gPizzaTypeId": 20,
+          "customerName": "Do Hong Quan",
+          "date": "15/01/2021",
+          "status": "inprogress"
+      },
+      {
+          "id": 8,
+          "orderCode": "67012",
+          "gPizzaTypeId": 15,
+          "customerName": "Bui Thanh Phuoc",
+          "date": "15/01/2021",
+          "status": "inprogress"
+      }
+    ];
+  
+  // mảng pizza Type
+  var gPizzaType = [
+    {
+      typeId: 10,
+      typeName: "Hải Sản"
+    },
+    {
+      typeId: 15,
+      typeName: "Bò bít tết"
+    },
+    {
+      typeId: 20,
+      typeName: "Thịt gà"
+    }
+  ];
+
+  var gOrderTable = null;
+
+  var gCOLUMN_NAMES = ["id", "orderCode", "gPizzaTypeId", "customerName", "date", "status", "action"];
+
+  // chỉ số các cột cần render riêng
+  var gCOL_PIZZA_TYPE = 2;
+  var gCOL_ACTION = 6;
+
+  
+  /*** REGION 2 - Vùng gán / thực thi hàm xử lý sự kiện cho các elements */
+    $(document).ready(function() {
+    onPageLoading();
+
+    $("#btn-filter-order").on("click", onBtnFilterOrderClick);
+  });
+
+  /*** REGION 3 - Event handlers - Vùng khai báo các hàm xử lý sự kiện */  
+    // hàm xử lý khi tải trang
+  function onPageLoading() {
+    initDataTable();
+    loadDataToTable(gOrderObjects);
+    loadPizzaTypeToSelect();
+  }
+
+  // hàm xử lý khi ấn nút Lọc dữ liệu
+  function onBtnFilterOrderClick() {
+    // B1: thu thập dữ liệu
+    var vPizzaTypeId = $("#gPizzaTypeSelect").val();
+
+    // B2: validate - chọn "Tất cả" thì hiển thị lại toàn bộ
+    if (vPizzaTypeId === "") {
+      loadDataToTable(gOrderObjects);
+      return;
+    }
+
+    // B3: xử lý - lọc mảng theo pizzaTypeId
+    var vTypeIdNumber = parseInt(vPizzaTypeId);
+    var vFilteredOrders = [];
+    for (var bI = 0; bI < gOrderObjects.length; bI++) {
+      if (gOrderObjects[bI].gPizzaTypeId === vTypeIdNumber) {
+        vFilteredOrders.push(gOrderObjects[bI]);
+      }
+    }
+
+    // B4: hiển thị kết quả
+    loadDataToTable(vFilteredOrders);
+  }
+
+  /*** REGION 4 - Common funtions - Vùng khai báo hàm dùng chung trong toàn bộ chương trình*/
+    // hàm khởi tạo DataTable
+  function initDataTable() {
+    gOrderTable = $("#order-table").DataTable({
+      "columns": [
+        { "data": gCOLUMN_NAMES[0] },
+        { "data": gCOLUMN_NAMES[1] },
+        { "data": gCOLUMN_NAMES[2] },
+        { "data": gCOLUMN_NAMES[3] },
+        { "data": gCOLUMN_NAMES[4] },
+        { "data": gCOLUMN_NAMES[5] },
+        { "data": gCOLUMN_NAMES[6] }
+      ],
+      "columnDefs": [
+        {
+          "targets": gCOL_PIZZA_TYPE,
+          "render": function(data) {
+            return getPizzaNameByTypeId(data);
+          }
+        },
+        {
+          "targets": gCOL_ACTION,
+          "defaultContent":
+            '<i class="fas fa-edit text-primary mr-3" title="Sửa order" style="cursor: pointer"></i>' +
+            '<i class="fas fa-trash text-danger" title="Xoá order" style="cursor: pointer"></i>'
+        }
+      ]
+    });
+  }
+
+  // hàm đổ dữ liệu vào DataTable
+  function loadDataToTable(paramOrders) {
+    gOrderTable.clear();
+    gOrderTable.rows.add(paramOrders);
+    gOrderTable.draw();
+  }
+
+  // hàm đổ dữ liệu loại pizza vào select
+  function loadPizzaTypeToSelect() {
+    $("#gPizzaTypeSelect").append($("<option>", { value: "", text: "Tất cả" }));
+
+    for (var bI = 0; bI < gPizzaType.length; bI++) {
+      $("#gPizzaTypeSelect").append($("<option>", {
+        value: gPizzaType[bI].typeId,
+        text: gPizzaType[bI].typeName
+      }));
+    }
+  }
+
+  
+  // hàm trả về pizzaTypeName dựa vào typeId
+  function getPizzaNameByTypeId(paramTypeId) {
+    "use strict";
+    var vPizzaTypeName = "";
+    var vIndex = 0;
+    var vIsTypeFound = false;
+    while(!vIsTypeFound && vIndex < gPizzaType.length) {
+      if(gPizzaType[vIndex].typeId === paramTypeId) {
+        vIsTypeFound = true;
+        vPizzaTypeName = gPizzaType[vIndex].typeName;
+      }
+      else {
+        vIndex ++;
+      }
+    }
+    return vPizzaTypeName;
+  }
+
+</script>
+</body>
+</html>
