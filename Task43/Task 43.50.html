@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Task 43.50</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .content-center {
+            justify-content: center;
+        }
+
+        .list-item-contains {
+            margin-bottom: 1.5em;
+            border: 0;
+            box-shadow: 5px 0px 5px -1px #f6f6f6, 0px 5px 5px 0px #F6F6F4, -5px 0px 5px -1px #f6f6f6, 0px -5px 5px -1px #f6f6f6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row mt-4 content-center">
+            <div class="col-md-8">
+                <ul class="list-group" id="comment-list"></ul>
+            </div>
+        </div>
+
+        <div class="row mt-4 content-center">
+            <div class="col-md-8 d-flex justify-content-center">
+                <ul class="pagination" id="page-container"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        "use strict";
+        /*** REGION 1 - Global variables ***/
+        const gBASE_URL = "https://jsonplaceholder.typicode.com/comments";
+
+        var gTotalRecords = 100;
+
+        var gPerpage = 4;
+
+        var gTotalPages = Math.ceil(gTotalRecords / gPerpage);
+
+        /*** REGION 2 - Vùng gán sự kiện ***/
+        $(document).ready(function () {
+            // hiển thị trang 1 khi tải trang
+            onPageChange(1);
+
+            // subTask 3: đính kèm action cho mỗi nút phân trang
+            $("#page-container").on("click", ".page-number", function () {
+                var vPageNum = parseInt($(this).attr("data-page"));
+                onPageChange(vPageNum);
+            });
+        });
+
+        /*** REGION 3 - Event handlers ***/
+        // hàm xử lý khi chuyển sang trang bất kỳ
+        function onPageChange(paramPageNum) {
+            // B1: vẽ lại thanh phân trang, đánh dấu trang hiện tại
+            createPagination(paramPageNum);
+
+            // B2: gọi API lấy dữ liệu của trang đó
+            callApiGetComments(paramPageNum);
+        }
+
+        /*** REGION 4 - Common functions ***/
+        // hàm tạo thanh phân trang - subTask 3: KHÔNG có nút Prev / Next
+        function createPagination(paramCurrentPage) {
+            // xoá trắng thanh phân trang cũ
+            $("#page-container").html("");
+
+            for (var bI = 1; bI <= gTotalPages; bI++) {
+                if (bI === paramCurrentPage) {
+                    // trang đang xem: tô đậm (active), không cần gắn action
+                    $("#page-container").append(
+                        "<li class='page-item active'><a href='javascript:void(0)' class='page-link'>" + bI + "</a></li>"
+                    );
+                } else {
+                    // các trang khác: gắn class page-number + data-page để bắt sự kiện click
+                    $("#page-container").append(
+                        "<li class='page-item page-number' data-page='" + bI + "'>" +
+                        "<a href='javascript:void(0)' class='page-link'>" + bI + "</a></li>"
+                    );
+                }
+            }
+        }
+
+        // hàm gọi API lấy comments theo trang
+        function callApiGetComments(paramPageNum) {
+            const vQueryParams = new URLSearchParams({
+                "_start": (paramPageNum - 1) * gPerpage,
+                "_limit": gPerpage
+            });
+
+            $.ajax({
+                type: "get",
+                url: gBASE_URL + "?" + vQueryParams.toString(),
+                dataType: "json",
+                success: function (paramData) {
+                    console.log(paramData);
+                    loadCommentsToList(paramData);
+                },
+                error: function (error) {
+                    console.assert(false, error.responseText);
+                    $("#comment-list").html("<li class='list-group-item'>Gọi API thất bại!</li>");
+                }
+            });
+        }
+
+        // hàm hiển thị danh sách comment ra giao diện
+        function loadCommentsToList(paramComments) {
+            // xoá trắng danh sách cũ
+            $("#comment-list").html("");
+
+            for (var bI = 0; bI < paramComments.length; bI++) {
+                var bComment = paramComments[bI];
+
+                $("#comment-list").append(`
+      <li class='list-group-item list-item-contains'>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">${bComment.name}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${bComment.email}</h6>
+            <p class="card-text">${bComment.body}</p>
+          </div>
+        </div>
+      </li>`);
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
