@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 43.70</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="text-center mt-3 mb-3">
+            <h2>F100 - QUẢN TRỊ NGƯỜI DÙNG</h2>
+        </div>
+
+        <div class="jumbotron py-4">
+            <div class="row form-group align-items-center">
+                <div class="col-sm-2">
+                    <label for="select-role">Role</label>
+                </div>
+                <div class="col-sm-5">
+                    <select class="form-control" id="select-role"></select>
+                </div>
+                <div class="col-sm-3">
+                    <button id="btn-filter-user" class="btn btn-success">Lọc dữ liệu</button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped table-hover" id="user-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Username</th>
+                    <th>First name</th>
+                    <th>Last name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+
+        <p id="record-count" class="border border-dark d-inline-block p-2"></p>
+    </div>
+
+
+    <script>
+        "use strict";
+        /*** REGION 1 - Global variables ***/
+        var gUserObjects = [
+            { id: 1, username: "ngado20", firstname: "Dinh Hong", lastname: "Nam", email: "nam@gmail.com", age: 37, roleId: 5 },
+            { id: 2, username: "quannv", firstname: "Nguyen Van", lastname: "Quan", email: "quan@gmail.com", age: 23, roleId: 8 },
+            { id: 3, username: "hiendt", firstname: "Do Thi", lastname: "Hien", email: "hien@gmail.com", age: 27, roleId: 11 },
+            { id: 4, username: "lanht", firstname: "Ho Thi", lastname: "Lan", email: "lan@gmail.com", age: 29, roleId: 11 },
+            { id: 5, username: "phuocbt", firstname: "Bui Thanh", lastname: "Phuoc", email: "phuoc@gmail.com", age: 31, roleId: 13 },
+            { id: 6, username: "minhdt", firstname: "Dang Tien", lastname: "Minh", email: "minh@gmail.com", age: 41, roleId: 5 }
+        ];
+
+        var roleDataObjects = [
+            { roleId: 5, roleName: "Admin" },
+            { roleId: 8, roleName: "Manager" },
+            { roleId: 11, roleName: "Teacher" },
+            { roleId: 13, roleName: "Staff" }
+        ];
+
+        var gUserTable = null;
+
+        var gCOLUMN_NAMES = ["stt", "username", "firstname", "lastname", "email", "age", "roleId", "action"];
+
+        var gCOL_STT = 0;
+        var gCOL_ROLE = 6;
+        var gCOL_ACTION = 7;
+
+        /*** REGION 2 - Vùng gán sự kiện ***/
+        $(document).ready(function () {
+            onPageLoading();
+
+            $("#btn-filter-user").on("click", onBtnFilterUserClick);
+
+            // gán delegation vì icon do DataTable vẽ động
+            $("#user-table").on("click", ".voucher-history-icon", onIconVoucherHistoryClick);
+        });
+
+        /*** REGION 3 - Event handlers ***/
+        function onPageLoading() {
+            initDataTable();
+            loadRoleToSelect();
+            loadDataToTable(gUserObjects);
+        }
+
+        function onBtnFilterUserClick() {
+            // B1: thu thập dữ liệu
+            var vRoleId = $("#select-role").val();
+
+            // B2: validate
+            if (vRoleId === "") {
+                loadDataToTable(gUserObjects);
+                return;
+            }
+
+            // B3: xử lý - lọc theo roleId
+            var vRoleIdNumber = parseInt(vRoleId);
+            var vFilteredUsers = [];
+            for (var bI = 0; bI < gUserObjects.length; bI++) {
+                if (gUserObjects[bI].roleId === vRoleIdNumber) {
+                    vFilteredUsers.push(gUserObjects[bI]);
+                }
+            }
+
+            // B4: hiển thị
+            loadDataToTable(vFilteredUsers);
+        }
+
+        // hàm xử lý khi ấn icon Voucher History - subTask 1
+        function onIconVoucherHistoryClick() {
+            // B1: lấy dữ liệu dòng vừa ấn
+            var vRowData = gUserTable.row($(this).parents("tr")).data();
+
+            // B2: validate
+            if (vRowData == null) {
+                return;
+            }
+
+            // B3: tạo query string
+            var vQueryString = "?username=" + encodeURIComponent(vRowData.username)
+                + "&firstname=" + encodeURIComponent(vRowData.firstname)
+                + "&lastname=" + encodeURIComponent(vRowData.lastname);
+
+            // B4: chuyển trang
+            window.location.href = "voucherHistory.html" + vQueryString;
+        }
+
+        /*** REGION 4 - Common functions ***/
+        function initDataTable() {
+            gUserTable = $("#user-table").DataTable({
+                "columns": [
+                    { "data": gCOLUMN_NAMES[0] },
+                    { "data": gCOLUMN_NAMES[1] },
+                    { "data": gCOLUMN_NAMES[2] },
+                    { "data": gCOLUMN_NAMES[3] },
+                    { "data": gCOLUMN_NAMES[4] },
+                    { "data": gCOLUMN_NAMES[5] },
+                    { "data": gCOLUMN_NAMES[6] },
+                    { "data": gCOLUMN_NAMES[7] }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": gCOL_STT,
+                        "defaultContent": "",
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    {
+                        "targets": gCOL_ROLE,
+                        "render": function (data) {
+                            return getRoleNameById(data);
+                        }
+                    },
+                    {
+                        "targets": gCOL_ACTION,
+                        "defaultContent":
+                            '<i class="fas fa-dice text-primary mr-3 dice-history-icon" title="Dice History" style="cursor: pointer"></i>' +
+                            '<i class="fas fa-gift text-info voucher-history-icon" title="Voucher History" style="cursor: pointer"></i>'
+                    }
+                ]
+            });
+        }
+
+        function loadDataToTable(paramUsers) {
+            gUserTable.clear();
+            gUserTable.rows.add(paramUsers);
+            gUserTable.draw();
+
+            $("#record-count").text("Có " + paramUsers.length + " bản ghi thỏa mãn!");
+        }
+
+        function loadRoleToSelect() {
+            $("#select-role").append($("<option>", { value: "", text: "Chọn một Role ..." }));
+
+            for (var bI = 0; bI < roleDataObjects.length; bI++) {
+                $("#select-role").append($("<option>", {
+                    value: roleDataObjects[bI].roleId,
+                    text: roleDataObjects[bI].roleName
+                }));
+            }
+        }
+
+        function getRoleNameById(paramRoleId) {
+            var vRoleName = "";
+            var vIndex = 0;
+            var vIsRoleFound = false;
+            while (!vIsRoleFound && vIndex < roleDataObjects.length) {
+                if (roleDataObjects[vIndex].roleId === paramRoleId) {
+                    vIsRoleFound = true;
+                    vRoleName = roleDataObjects[vIndex].roleName;
+                } else {
+                    vIndex++;
+                }
+            }
+            return vRoleName;
+        }
+
+    </script>
+</body>
+
+</html>
