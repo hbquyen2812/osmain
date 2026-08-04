@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice History</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="text-center mt-3 mb-3">
+            <h2>F200 - LỊCH SỬ QUAY DICE</h2>
+        </div>
+
+        <div class="jumbotron py-4">
+            <h5 class="mb-3">Thông tin người chơi:</h5>
+            <div class="row form-group align-items-center">
+                <div class="col-sm-2"><label for="inp-username">Username</label></div>
+                <div class="col-sm-2"><input type="text" class="form-control" id="inp-username" disabled></div>
+                <div class="col-sm-2"><label for="inp-firstname">Firstname</label></div>
+                <div class="col-sm-2"><input type="text" class="form-control" id="inp-firstname" disabled></div>
+                <div class="col-sm-1"><label for="inp-lastname">Lastname</label></div>
+                <div class="col-sm-3"><input type="text" class="form-control" id="inp-lastname" disabled></div>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-striped table-hover" id="dice-table">
+            <thead>
+                <tr>
+                    <th>Lần chơi</th>
+                    <th>Kết quả</th>
+                </tr>
+            </thead>
+        </table>
+
+        <p id="record-count" class="border border-dark d-inline-block p-2"></p>
+    </div>
+
+    <script>
+        "use strict";
+        /*** REGION 1 - Global variables ***/
+        const gBASE_URL = "https://lucky-dice.onschoolbootcamp.edu.vn/lucky-dice/history";
+
+        var gDiceTable = null;
+
+        var gCOLUMN_NAMES = ["stt", "dice"];
+        var gCOL_STT = 0;
+
+        /*** REGION 2 - Vùng gán sự kiện ***/
+        $(document).ready(function () {
+            onPageLoading();
+        });
+
+        /*** REGION 3 - Event handlers ***/
+        function onPageLoading() {
+            // B1: thu thập dữ liệu từ query string
+            var vUrlParams = new URLSearchParams(window.location.search);
+            var vUsername = vUrlParams.get("username");
+            var vFirstname = vUrlParams.get("firstname");
+            var vLastname = vUrlParams.get("lastname");
+            console.log("username =", vUsername, "| firstname =", vFirstname, "| lastname =", vLastname);
+
+            // B2: validate
+            if (vUsername === null || vUsername === "") {
+                alert("Không nhận được username!");
+                return;
+            }
+
+            // B3: xử lý - hiện thông tin người chơi + khởi tạo bảng
+            $("#inp-username").val(vUsername);
+            $("#inp-firstname").val(vFirstname);
+            $("#inp-lastname").val(vLastname);
+            initDataTable();
+
+            // B4: gọi API và hiển thị kết quả
+            callApiGetDiceHistory(vUsername);
+        }
+
+        /*** REGION 4 - Common functions ***/
+        // hàm gọi API lấy lịch sử quay dice (jQuery Ajax)
+        function callApiGetDiceHistory(paramUsername) {
+            $.ajax({
+                url: gBASE_URL + "/dices?username=" + encodeURIComponent(paramUsername),
+                type: "GET",
+                dataType: "json",
+                success: function (responseObject) {
+                    console.log(responseObject);
+
+                    // API trả về { "dices": [1, 6, 4, ...] } -> bóc mảng số ra
+                    var vDiceArray = responseObject.dices;
+
+                    // gói mỗi số thành 1 object để DataTable đọc được field "dice"
+                    var vDiceObjects = [];
+                    for (var bI = 0; bI < vDiceArray.length; bI++) {
+                        vDiceObjects.push({ dice: vDiceArray[bI] });
+                    }
+
+                    loadDataToTable(vDiceObjects);
+                },
+                error: function (error) {
+                    console.assert(false, error.responseText);
+                    alert("Gọi API thất bại!");
+                }
+            });
+        }
+
+        // hàm khởi tạo DataTable
+        function initDataTable() {
+            gDiceTable = $("#dice-table").DataTable({
+                "columns": [
+                    { "data": gCOLUMN_NAMES[0] },
+                    { "data": gCOLUMN_NAMES[1] }
+                ],
+                "columnDefs": [
+                    {
+                        "targets": gCOL_STT,
+                        "defaultContent": "",
+                        "render": function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    }
+                ]
+            });
+        }
+
+        // hàm đổ dữ liệu vào bảng
+        function loadDataToTable(paramDices) {
+            gDiceTable.clear();
+            gDiceTable.rows.add(paramDices);
+            gDiceTable.draw();
+
+            $("#record-count").text("Có " + paramDices.length + " bản ghi thỏa mãn!");
+        }
+
+
+
+    </script>
+</body>
+
+</html>
