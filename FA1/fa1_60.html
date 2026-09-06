@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrow Function Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #result {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Arrow Function trong JavaScript</h1>
+  <button onclick="calculateSum()">Tính tổng các số</button>
+  <button onclick="findMax()">Tìm số lớn nhất</button>
+  <div id="result"></div>
+
+  <script>
+    const calculateSum = () => {
+      const sum = (...numbers) => numbers.reduce((total, num) => total + num, 0);
+      const result = sum(1, 2, 3, 4, 5);
+      document.getElementById('result').innerHTML =
+        `<p>Tổng các số [1, 2, 3, 4, 5]: ${result}</p>`;
+    };
+
+    const findMax = () => {
+      const max = (arr) => Math.max(...arr);
+      const numbers = [10, 20, 30, 40, 50];
+      const result = max(numbers);
+      document.getElementById('result').innerHTML =
+        `<p>Số lớn nhất trong [10, 20, 30, 40, 50]: ${result}</p>`;
+    };
+  </script>
+</body>
+</html>
