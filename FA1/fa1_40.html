@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Destructuring Example</title>
+</head>
+<body>
+  <h1>Destructuring ES6 Example</h1>
+
+  <div>
+    <h2>User Information</h2>
+    <p id="user-info"></p>
+  </div>
+
+  <div>
+    <h2>Array Values</h2>
+    <p id="array-values"></p>
+  </div>
+
+  <script>
+    const user = {
+      name: 'Alice',
+      age: 25,
+      email: 'alice@example.com'
+    };
+
+    const numbers = [1, 2, 3, 4, 5];
+
+    const { name, age, email } = user;
+    const [first, second, ...rest] = numbers;
+
+    document.getElementById('user-info').innerText =
+      `Name: ${name}, Age: ${age}, Email: ${email}`;
+
+    document.getElementById('array-values').innerText =
+      `First: ${first}, Second: ${second}, Rest: ${rest.join(', ')}`;
+  </script>
+</body>
+</html>
