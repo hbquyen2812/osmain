@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FA1.70 Tổng Hợp</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Destructuring, Arrow Function, Rest Parameters, Spread Operator</h1>
+
+  <button onclick="showUserInfo()">Hiển thị thông tin người dùng</button>
+  <button onclick="calculateSum()">Tính tổng các số</button>
+  <button onclick="combineArrays()">Kết hợp mảng</button>
+
+  <div id="result"></div>
+
+  <script>
+    // Đối tượng user và hai mảng
+    const user = {
+      name: 'Alice',
+      age: 25,
+      email: 'alice@example.com'
+    };
+
+    const array1 = [1, 2, 3];
+    const array2 = [4, 5, 6];
+
+    // Nút 1: Destructuring
+    const showUserInfo = () => {
+      const { name, age, email } = user;
+      document.getElementById('result').innerHTML =
+        `Name: ${name}, Age: ${age}, Email: ${email}`;
+    };
+
+    // Nút 2: Arrow Function + Rest Parameters
+    const calculateSum = (...numbers) => {
+      const sum = numbers.reduce((total, num) => total + num, 0);
+      document.getElementById('result').innerHTML = `Sum: ${sum}`;
+    };
+
+    // Nút 3: Spread Operator
+    const combineArrays = () => {
+      const combinedArray = [...array1, ...array2];
+      document.getElementById('result').innerHTML =
+        `Combined Array: ${combinedArray.join(', ')}`;
+    };
+  </script>
+</body>
+</html>
