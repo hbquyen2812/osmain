@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Management</title>
+</head>
+<body>
+    <h1>Pet Management</h1>
+
+    <div>
+        <label for="nameInput">Name:</label>
+        <input type="text" id="nameInput">
+    </div>
+
+    <div>
+        <label for="ageInput">Age (years):</label>
+        <input type="number" id="ageInput" min="0" step="any">
+    </div>
+
+    <div>
+        <label for="typeInput">Pet Type:</label>
+
+        <select id="typeInput">
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="detailInput" id="detailLabel">Breed:</label>
+        <input type="text" id="detailInput">
+    </div>
+
+    <button type="button" id="addPetButton">
+        Add Pet
+    </button>
+
+    <h2>Pet List</h2>
+    <div id="petList"></div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
