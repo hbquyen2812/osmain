@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA2.40 - Tính đóng gói</title>
+</head>
+<body>
+    <h1>Thông tin người dùng</h1>
+
+    <button id="displayUserButton" type="button">
+        Hiển thị User
+    </button>
+
+    <button id="displayAdminButton" type="button">
+        Hiển thị Admin
+    </button>
+
+    <button id="displayGuestButton" type="button">
+        Hiển thị Guest
+    </button>
+
+    <div id="result"></div>
+
+    <script>
+        class User {
+            #name;
+            #age;
+            #email;
+
+            constructor(name, age, email) {
+                this.name = name;
+                this.age = age;
+                this.email = email;
+            }
+
+            get name() {
+                return this.#name;
+            }
+
+            set name(value) {
+                this.#name = value;
+            }
+
+            get age() {
+                return this.#age;
+            }
+
+            set age(value) {
+                if (!Number.isInteger(value) || value < 0) {
+                    throw new Error("Tuổi phải là số nguyên không âm.");
+                }
+
+                this.#age = value;
+            }
+
+            get email() {
+                return this.#email;
+            }
+
+            set email(value) {
+                this.#email = value;
+            }
+
+            getInfo() {
+                return `Tên: ${this.#name} | Tuổi: ${this.#age} | Email: ${this.#email}`;
+            }
+        }
+
+        class Admin extends User {
+            constructor(name, age, email, role) {
+                super(name, age, email);
+                this.role = role;
+            }
+
+            getInfo() {
+                return `${super.getInfo()} | Vai trò: ${this.role}`;
+            }
+        }
+
+        class Guest extends User {
+            constructor(name, age, email, guestPass) {
+                super(name, age, email);
+                this.guestPass = guestPass;
+            }
+
+            getInfo() {
+                return `${super.getInfo()} | Mã khách: ${this.guestPass}`;
+            }
+        }
+
+        const result = document.getElementById("result");
+
+        const userButton =
+            document.getElementById("displayUserButton");
+
+        const adminButton =
+            document.getElementById("displayAdminButton");
+
+        const guestButton =
+            document.getElementById("displayGuestButton");
+
+        function displayInfo(user) {
+            result.textContent = user.getInfo();
+        }
+
+        function displayUser() {
+            const user = new User(
+                "Nguyễn Văn An",
+                20,
+                "an@example.com"
+            );
+
+            displayInfo(user);
+        }
+
+        function displayAdmin() {
+            const admin = new Admin(
+                               "Trần Thị Bình",
+                25,
+                "binh@example.com",
+                "Quản trị viên"
+            );
+
+            displayInfo(admin);
+        }
+
+        function displayGuest() {
+            const guest = new Guest(
+                "Lê Văn Cường",
+                22,
+                "cuong@example.com",
+                "GUEST001"
+            );
+
+            displayInfo(guest);
+        }
+
+        userButton.addEventListener("click", displayUser);
+        adminButton.addEventListener("click", displayAdmin);
+        guestButton.addEventListener("click", displayGuest);
+    </script>
+</body>
+</html>
