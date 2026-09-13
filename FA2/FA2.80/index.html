@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Management</title>
+</head>
+<body>
+    <h1>Vehicle Management</h1>
+
+    <div>
+        <label for="nameInput">Vehicle Name:</label>
+        <input type="text" id="nameInput">
+    </div>
+
+    <div>
+        <label for="brandInput">Brand:</label>
+        <input type="text" id="brandInput">
+    </div>
+
+    <div>
+        <label for="typeInput">Vehicle Type:</label>
+
+        <select id="typeInput">
+            <option value="car">Car</option>
+            <option value="motorcycle">Motorcycle</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="detailInput" id="detailLabel">
+            Number of Doors:
+        </label>
+        <input type="number" id="detailInput" min="1" step="1">
+    </div>
+
+    <button type="button" id="addVehicleButton">
+        Add Vehicle
+    </button>
+
+    <h2>Vehicle List</h2>
+    <div id="vehicleList"></div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
