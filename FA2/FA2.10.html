@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA2.10 - Sử dụng Class</title>
+</head>
+<body>
+    <h1>Thông tin người dùng</h1>
+
+    <button id="displayUserButton" type="button">
+        Hiển thị người dùng
+    </button>
+
+    <div id="result"></div>
+
+    <script>
+        class User {
+            constructor(name, age, email) {
+                this.name = name;
+                this.age = age;
+                this.email = email;
+            }
+
+            getInfo() {
+                return `Tên: ${this.name} | Tuổi: ${this.age} | Email: ${this.email}`;
+            }
+        }
+
+        const displayUserButton =
+            document.getElementById("displayUserButton");
+
+        const result = document.getElementById("result");
+
+        function displayUser() {
+            const user = new User(
+                "Nguyễn Văn An",
+                20,
+                "an@example.com"
+            );
+
+            result.textContent = user.getInfo();
+        }
+
+        displayUserButton.addEventListener("click", displayUser);
+    </script>
+</body>
+</html>
