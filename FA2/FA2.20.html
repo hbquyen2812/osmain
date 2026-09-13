@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA2.20 - Kế thừa trong Class</title>
+</head>
+<body>
+    <h1>Thông tin quản trị viên</h1>
+
+    <button id="displayUserButton" type="button">
+        Hiển thị quản trị viên
+    </button>
+
+    <div id="result"></div>
+
+    <script>
+        class User {
+            constructor(name, age, email) {
+                this.name = name;
+                this.age = age;
+                this.email = email;
+            }
+
+            getInfo() {
+                return `Tên: ${this.name} | Tuổi: ${this.age} | Email: ${this.email}`;
+            }
+        }
+
+        class Admin extends User {
+            constructor(name, age, email, role) {
+                super(name, age, email);
+                this.role = role;
+            }
+
+            getInfo() {
+                return `${super.getInfo()} | Vai trò: ${this.role}`;
+            }
+        }
+
+        const displayUserButton =
+            document.getElementById("displayUserButton");
+
+        const result = document.getElementById("result");
+
+        function displayAdmin() {
+            const admin = new Admin(
+                "Nguyễn Văn An",
+                20,
+                "an@example.com",
+                "Quản trị viên"
+            );
+
+            result.textContent = admin.getInfo();
+        }
+
+        displayUserButton.addEventListener("click", displayAdmin);
+    </script>
+</body>
+</html>
