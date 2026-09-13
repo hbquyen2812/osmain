@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management</title>
+</head>
+<body>
+    <h1>Student Management</h1>
+
+    <div>
+        <label for="nameInput">Name:</label>
+        <input type="text" id="nameInput">
+    </div>
+
+    <div>
+        <label for="ageInput">Age:</label>
+        <input type="number" id="ageInput" min="1" step="1">
+    </div>
+
+    <div>
+        <label for="classInput">Class:</label>
+        <input type="text" id="classInput">
+    </div>
+
+    <button type="button" id="addStudentButton">
+        Add Student
+    </button>
+
+    <h2>Student List</h2>
+    <div id="studentList"></div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
