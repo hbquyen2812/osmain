@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Quản Lý Sinh Viên</title>
+</head>
+
+
+<body>
+
+    <h1>Quản Lý Sinh Viên</h1>
+
+
+    <div>
+        <label for="name">
+            Tên sinh viên:
+        </label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Nhập tên sinh viên"
+        >
+    </div>
+
+
+    <br>
+
+
+    <div>
+        <label for="age">
+            Tuổi:
+        </label>
+
+        <input
+            type="number"
+            id="age"
+            placeholder="Nhập tuổi"
+        >
+    </div>
+
+
+    <br>
+
+
+    <div>
+        <label for="studentClass">
+            Lớp:
+        </label>
+
+        <input
+            type="text"
+            id="studentClass"
+            placeholder="Nhập lớp"
+        >
+    </div>
+
+
+    <br>
+
+
+    <button id="addStudent">
+        Thêm Sinh Viên
+    </button>
+
+
+    <h2>Danh Sách Sinh Viên</h2>
+
+
+    <div id="studentList"></div>
+
+
+
+    <script type="module">
+
+        import Student from "./student.js";
+
+        import StudentList from "./studentList.js";
+
+        const studentList = new StudentList();
+
+        const nameInput =
+            document.getElementById("name");
+
+        const ageInput =
+            document.getElementById("age");
+
+        const classInput =
+            document.getElementById("studentClass");
+
+        const addStudentButton =
+            document.getElementById("addStudent");
+
+        const studentListDiv =
+            document.getElementById("studentList");
+
+
+        addStudentButton.addEventListener("click", () => {
+
+            const name = nameInput.value.trim();
+
+            const age = ageInput.value;
+
+            const studentClass =
+                classInput.value.trim();
+
+
+            if (!name || !age || !studentClass) {
+
+                alert("Vui lòng nhập đầy đủ thông tin!");
+
+                return;
+            }
+
+
+            const studentAge = parseInt(age);
+
+            if (studentAge <= 0) {
+
+                alert("Tuổi phải lớn hơn 0!");
+
+                return;
+            }
+
+            const student = new Student(
+                name,
+                studentAge,
+                studentClass
+            );
+
+            studentList.addStudent(student);
+
+            displayStudents();
+
+            clearInputs();
+        });
+
+
+        function displayStudents() {
+            studentListDiv.innerHTML = "";
+
+            const students =
+                studentList.getStudents();
+
+            for (const student of students) {
+
+                const studentDiv =
+                    document.createElement("div");
+
+                studentDiv.textContent =
+                    `Tên: ${student.name}, Tuổi: ${student.age}, Lớp: ${student.class}`;
+
+                studentListDiv.appendChild(studentDiv);
+            }
+        }
+
+
+        function clearInputs() {
+
+            nameInput.value = "";
+
+            ageInput.value = "";
+
+            classInput.value = "";
+
+            nameInput.focus();
+        }
+
+    </script>
+
+</body>
+
+</html>
