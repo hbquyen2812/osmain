@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA3.70 - Quản Lý Nhân Viên</title>
+</head>
+
+<body>
+
+    <h1>Quản Lý Nhân Viên</h1>
+
+    <div>
+        <label for="name">Tên nhân viên:</label>
+        <input type="text" id="name" placeholder="Nhập tên nhân viên">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="age">Tuổi:</label>
+        <input type="number" id="age" placeholder="Nhập tuổi">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="role">Loại nhân viên:</label>
+
+        <select id="role">
+            <option value="">Chọn loại nhân viên</option>
+            <option value="Manager">Manager</option>
+            <option value="Developer">Developer</option>
+        </select>
+    </div>
+
+    <br>
+
+    <button id="addEmployee">Thêm Nhân Viên</button>
+
+    <h2>Danh Sách Nhân Viên</h2>
+
+    <div id="employeeList"></div>
+
+    <script type="module">
+        import { Manager, Developer } from "./employee.js";
+        import EmployeeList from "./employeeList.js";
+
+        const employeeList = new EmployeeList();
+
+        const nameInput = document.getElementById("name");
+        const ageInput = document.getElementById("age");
+        const roleInput = document.getElementById("role");
+        const addEmployeeButton = document.getElementById("addEmployee");
+        const employeeListDiv = document.getElementById("employeeList");
+
+        addEmployeeButton.addEventListener("click", () => {
+            const name = nameInput.value.trim();
+            const age = ageInput.value;
+            const role = roleInput.value;
+
+            if (!name || !age || !role) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            const employeeAge = parseInt(age);
+
+            if (employeeAge <= 0) {
+                alert("Tuổi phải lớn hơn 0!");
+                return;
+            }
+
+            let employee;
+
+            if (role === "Manager") {
+                employee = new Manager(name, employeeAge);
+            } else if (role === "Developer") {
+                employee = new Developer(name, employeeAge);
+            }
+
+            employeeList.addEmployee(employee);
+
+            displayEmployees();
+
+            nameInput.value = "";
+            ageInput.value = "";
+            roleInput.value = "";
+
+            nameInput.focus();
+        });
+
+        function displayEmployees() {
+            employeeListDiv.innerHTML = "";
+
+            for (const employee of employeeList) {
+                const employeeDiv = document.createElement("div");
+
+                employeeDiv.textContent = employee.getInfo();
+
+                employeeListDiv.appendChild(employeeDiv);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
