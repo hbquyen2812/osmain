@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA3.50 - Quản Lý Thư Viện</title>
+</head>
+
+<body>
+
+    <h1>Quản Lý Thư Viện</h1>
+
+    <div>
+        <label for="title">Tên sách:</label>
+        <input type="text" id="title" placeholder="Nhập tên sách">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="author">Tác giả:</label>
+        <input type="text" id="author" placeholder="Nhập tên tác giả">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="year">Năm xuất bản:</label>
+        <input type="number" id="year" placeholder="Nhập năm xuất bản">
+    </div>
+
+    <br>
+
+    <button id="addBook">Thêm Sách</button>
+
+    <h2>Danh Sách Sách</h2>
+
+    <div id="bookList"></div>
+
+    <script type="module">
+        import Book from "./book.js";
+        import Library from "./library.js";
+
+        const library = new Library();
+
+        const titleInput = document.getElementById("title");
+        const authorInput = document.getElementById("author");
+        const yearInput = document.getElementById("year");
+        const addBookButton = document.getElementById("addBook");
+        const bookListDiv = document.getElementById("bookList");
+
+        addBookButton.addEventListener("click", () => {
+            const title = titleInput.value.trim();
+            const author = authorInput.value.trim();
+            const year = yearInput.value;
+
+            if (!title || !author || !year) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            const bookYear = parseInt(year);
+
+            if (bookYear <= 0) {
+                alert("Năm xuất bản không hợp lệ!");
+                return;
+            }
+
+            const book = new Book(
+                title,
+                author,
+                bookYear
+            );
+
+            library.addBook(book);
+
+            displayBooks();
+
+            titleInput.value = "";
+            authorInput.value = "";
+            yearInput.value = "";
+
+            titleInput.focus();
+        });
+
+        function displayBooks() {
+            bookListDiv.innerHTML = "";
+
+            for (const book of library) {
+                const bookDiv = document.createElement("div");
+
+                bookDiv.textContent =
+                    `Tên sách: ${book.getTitle()}, Tác giả: ${book.getAuthor()}, Năm xuất bản: ${book.getYear()}`;
+
+                bookListDiv.appendChild(bookDiv);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
