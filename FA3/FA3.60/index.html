@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA3.60 - Quản Lý Thú Cưng</title>
+</head>
+
+<body>
+
+    <h1>Quản Lý Thú Cưng</h1>
+
+    <div>
+        <label for="name">Tên thú cưng:</label>
+        <input type="text" id="name" placeholder="Nhập tên thú cưng">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="age">Tuổi:</label>
+        <input type="number" id="age" placeholder="Nhập tuổi">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="type">Loại:</label>
+
+        <select id="type">
+            <option value="">Chọn loại thú cưng</option>
+            <option value="Dog">Dog</option>
+            <option value="Cat">Cat</option>
+        </select>
+    </div>
+
+    <br>
+
+    <button id="addPet">Thêm Thú Cưng</button>
+
+    <h2>Danh Sách Thú Cưng</h2>
+
+    <div id="petList"></div>
+
+    <script type="module">
+        import { Dog, Cat } from "./pet.js";
+        import PetList from "./petList.js";
+
+        const petList = new PetList();
+
+        const nameInput = document.getElementById("name");
+        const ageInput = document.getElementById("age");
+        const typeInput = document.getElementById("type");
+        const addPetButton = document.getElementById("addPet");
+        const petListDiv = document.getElementById("petList");
+
+        addPetButton.addEventListener("click", () => {
+            const name = nameInput.value.trim();
+            const age = ageInput.value;
+            const type = typeInput.value;
+
+            if (!name || !age || !type) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            const petAge = parseInt(age);
+
+            if (petAge <= 0) {
+                alert("Tuổi phải lớn hơn 0!");
+                return;
+            }
+
+            let pet;
+
+            if (type === "Dog") {
+                pet = new Dog(name, petAge);
+            } else if (type === "Cat") {
+                pet = new Cat(name, petAge);
+            }
+
+            petList.addPet(pet);
+
+            displayPets();
+
+            nameInput.value = "";
+            ageInput.value = "";
+            typeInput.value = "";
+
+            nameInput.focus();
+        });
+
+        function displayPets() {
+            petListDiv.innerHTML = "";
+
+            for (const pet of petList) {
+                const petDiv = document.createElement("div");
+
+                petDiv.textContent =
+                    `Tên: ${pet.getName()}, Tuổi: ${pet.getAge()}, Loại: ${pet.getType()}`;
+
+                petListDiv.appendChild(petDiv);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
