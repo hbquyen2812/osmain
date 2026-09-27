@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA4.60 Product Management</title>
+</head>
+<body>
+
+    <h1>Danh sách sản phẩm</h1>
+
+    <button id="btn-load">Tải Dữ Liệu</button>
+
+    <select id="category-select">
+        <option value="all">Tất cả danh mục</option>
+    </select>
+
+    <div id="product-list"></div>
+
+    <script type="module">
+        import {
+            fetchProducts,
+            filterProductsByCategory
+        } from "./productService.js";
+
+        const btnLoad = document.getElementById("btn-load");
+        const categorySelect = document.getElementById("category-select");
+        const productList = document.getElementById("product-list");
+
+        let products = [];
+
+        btnLoad.addEventListener("click", loadProducts);
+        categorySelect.addEventListener("change", filterProducts);
+
+        async function loadProducts() {
+            try {
+                products = await fetchProducts();
+
+                loadCategories();
+                displayProducts(products);
+            } catch (error) {
+                productList.innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
+        function loadCategories() {
+            categorySelect.innerHTML =
+                '<option value="all">Tất cả danh mục</option>';
+
+            const categories = [
+                ...new Set(products.map(product => product.category))
+            ];
+
+            categories.forEach(category => {
+                categorySelect.innerHTML += `
+                    <option value="${category}">
+                        ${category}
+                    </option>
+                `;
+            });
+        }
+
+        function displayProducts(productArray) {
+            let html = "";
+
+            productArray.forEach(product => {
+                html += `
+                    <div>
+                        <img src="${product.image}" width="100">
+                        <h3>${product.title}</h3>
+                        <p>Giá: $${product.price}</p>
+                        <p>Danh mục: ${product.category}</p>
+                        <p>${product.description}</p>
+                        <p>${product.getProductInfo()}</p>
+                        <hr>
+                    </div>
+                `;
+            });
+
+            productList.innerHTML = html;
+        }
+
+        function filterProducts() {
+            const category = categorySelect.value;
+
+            const filteredProducts = filterProductsByCategory(
+                products,
+                category
+            );
+
+            displayProducts(filteredProducts);
+        }
+    </script>
+
+</body>
+</html>
