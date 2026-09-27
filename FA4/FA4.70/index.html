@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FA4.70 User Management</title>
+</head>
+<body>
+
+    <h1>Danh sách người dùng</h1>
+
+    <button id="btn-load">Tải Dữ Liệu</button>
+
+    <input
+        type="text"
+        id="search-input"
+        placeholder="Nhập tên người dùng"
+    >
+
+    <div id="user-list"></div>
+
+    <script type="module">
+        import {
+            fetchUsers,
+            filterUsersByName
+        } from "./userService.js";
+
+        const btnLoad = document.getElementById("btn-load");
+        const searchInput = document.getElementById("search-input");
+        const userList = document.getElementById("user-list");
+
+        let users = [];
+
+        btnLoad.addEventListener("click", loadUsers);
+        searchInput.addEventListener("input", filterUsers);
+
+        async function loadUsers() {
+            try {
+                users = await fetchUsers();
+                displayUsers(users);
+            } catch (error) {
+                userList.innerHTML = `<p>${error.message}</p>`;
+            }
+        }
+
+        function displayUsers(userArray) {
+            let html = "";
+
+            userArray.forEach(user => {
+                html += `
+                    <div>
+                        <h3>${user.name}</h3>
+                        <p>Username: ${user.username}</p>
+                        <p>Email: ${user.email}</p>
+                        <p>Phone: ${user.phone}</p>
+                        <p>Website: ${user.website}</p>
+                        <p>${user.getUserInfo()}</p>
+                        <hr>
+                    </div>
+                `;
+            });
+
+            userList.innerHTML = html;
+        }
+
+        function filterUsers() {
+            const name = searchInput.value;
+
+            const filteredUsers = filterUsersByName(users, name);
+
+            displayUsers(filteredUsers);
+        }
+    </script>
+
+</body>
+</html>
