@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.20 - Bài 8</title>
+</head>
+<body>
+    <script>
+        const splitIntoChunks = (text, n) => {
+            if (!Number.isInteger(n) || n <= 0) {
+                return [];
+            }
+
+            const result = [];
+
+            for (let i = 0; i < text.length; i += n) {
+                result.push(text.slice(i, i + n));
+            }
+
+            return result;
+        };
+
+        console.log(splitIntoChunks("dcresource", 2));
+        console.log(splitIntoChunks("dcresource", 3));
+    </script>
+</body>
+</html>

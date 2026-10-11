@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.20 - Bài 5</title>
+</head>
+<body>
+    <script>
+        const toPascalCase = (text) => {
+            return text.trim().split(/\s+/).map((word) => {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join("");
+        };
+
+        console.log(toPascalCase("JavaScript Exercises"));
+        console.log(toPascalCase("JavaScript exercises"));
+        console.log(toPascalCase("JavaScriptExercises"));
+    </script>
+</body>
+</html>

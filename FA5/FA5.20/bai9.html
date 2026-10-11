@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.20 - Bài 9</title>
+</head>
+<body>
+    <script>
+        const countOccurrences = (text, search) => {
+            if (search.length === 0) {
+                return 0;
+            }
+
+            const normalizedText = text.toLowerCase();
+            const normalizedSearch = search.toLowerCase();
+
+            return normalizedText.split(normalizedSearch).length - 1;
+        };
+
+        const text = "The quick brown fox jumps over the lazy dog";
+
+        console.log(countOccurrences(text, "the"));
+    </script>
+</body>
+</html>
