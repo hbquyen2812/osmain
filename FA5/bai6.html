@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.10 - Bài 6</title>
+</head>
+<body>
+    <script>
+        const filterValues = (array) => {
+            return array.filter((value) => {
+                const isValidType = typeof value === "number" ||
+                                    typeof value === "string";
+
+                return isValidType && Boolean(value);
+            });
+        };
+
+        const numbers = [NaN, 0, 15, false, -22, "", undefined, 47, null];
+
+        console.log(filterValues(numbers));
+    </script>
+</body>
+</html>

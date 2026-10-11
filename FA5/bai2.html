@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.10 - Bài 2</title>
+</head>
+<body>
+    <script>
+        const getElement = (array, n) => {
+            if (!Number.isInteger(n) || n < 0 || n >= array.length) {
+                return null;
+            }
+
+            return array[n];
+        };
+
+        console.log(getElement([1, 2, 3, 4, 5, 6], 3));
+        console.log(getElement([1, 2, 3, 4, 5, 6], 6));
+    </script>
+</body>
+</html>
