@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.50 - Bài 7</title>
+</head>
+<body>
+    <script>
+        const isPowerOfTwo = (number) => {
+            if (!Number.isInteger(number) || number < 1) {
+                return false;
+            }
+
+            while (number > 1) {
+                if (number % 2 !== 0) {
+                    return false;
+                }
+
+                number /= 2;
+            }
+
+            return true;
+        };
+
+        console.log(isPowerOfTwo(16));
+        console.log(isPowerOfTwo(18));
+        console.log(isPowerOfTwo(256));
+    </script>
+</body>
+</html>

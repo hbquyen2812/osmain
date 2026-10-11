@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.50 - Bài 6</title>
+</head>
+<body>
+    <script>
+        const isNumeric = (value) => {
+            if (typeof value === "number") {
+                return Number.isFinite(value);
+            }
+
+            if (typeof value !== "string" || value.trim() === "") {
+                return false;
+            }
+
+            return Number.isFinite(Number(value));
+        };
+
+        console.log(isNumeric(12));
+        console.log(isNumeric("abcd"));
+        console.log(isNumeric("12"));
+    </script>
+</body>
+</html>

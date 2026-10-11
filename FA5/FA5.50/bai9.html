@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.50 - Bài 9</title>
+</head>
+<body>
+    <script>
+        const formatThousands = (number) => {
+            const [integerPart, decimalPart] = String(number).split(".");
+
+            const formattedInteger = integerPart.replace(
+                /\B(?=(\d{3})+(?!\d))/g,
+                ","
+            );
+
+            return decimalPart === undefined
+                ? formattedInteger
+                : `${formattedInteger}.${decimalPart}`;
+        };
+
+        console.log(formatThousands(1000));
+        console.log(formatThousands(10000.23));
+    </script>
+</body>
+</html>
