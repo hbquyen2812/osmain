@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.30 - Bài 10</title>
+</head>
+<body>
+    <script>
+        const moveElement = (array, x, y) => {
+            const result = [...array];
+
+            const [element] = result.splice(x, 1);
+
+            result.splice(y, 0, element);
+
+            return result;
+        };
+
+        const numbers = [10, 20, 30, 40, 50];
+
+        console.log(moveElement(numbers, 0, 2));
+        console.log(moveElement(numbers, 1, 2));
+    </script>
+</body>
+</html>

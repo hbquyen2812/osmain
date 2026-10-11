@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.30 - Bài 8</title>
+</head>
+<body>
+    <script>
+        const getUniqueElements = (array1, array2) => {
+            const set1 = new Set(array1);
+            const set2 = new Set(array2);
+
+            const unique1 = [...set1].filter((value) => !set2.has(value));
+            const unique2 = [...set2].filter((value) => !set1.has(value));
+
+            return [...unique1, ...unique2];
+        };
+
+        console.log(getUniqueElements([1, 2, 3], [100, 2, 1, 10]));
+        console.log(getUniqueElements([1, 2, 3], [1, 2, 3]));
+    </script>
+</body>
+</html>
