@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.40 - Bài 3</title>
+</head>
+<body>
+    <script>
+        const removeSubstring = (text, substring) => {
+            return text.replace(substring, "").replace(/\s{2,}/g, " ").trim();
+        };
+
+        const text = "The quick brown fox jumps over the lazy dog";
+
+        console.log(removeSubstring(text, "the"));
+    </script>
+</body>
+</html>

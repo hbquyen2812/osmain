@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.40 - Bài 1</title>
+</head>
+<body>
+    <script>
+        const countCharacter = (text, character) => {
+            return [...text.toLowerCase()].filter(
+                (value) => value === character.toLowerCase()
+            ).length;
+        };
+
+        console.log(countCharacter("DCresource: JavaScript Exercises", "e"));
+    </script>
+</body>
+</html>

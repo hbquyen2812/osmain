@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>FA5.40 - Bài 7</title>
+</head>
+<body>
+    <script>
+        const isLowercase = (text, n) => {
+            const character = text[n];
+
+            if (character === undefined) {
+                return false;
+            }
+
+            return character === character.toLowerCase() &&
+                   character !== character.toUpperCase();
+        };
+
+        console.log(isLowercase("JsSTRING EXERCISES", 1));
+        console.log(isLowercase("JsSTRING EXERCISES", 2));
+    </script>
+</body>
+</html>
