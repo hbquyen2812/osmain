@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lander - Product Landing Page</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+        <div class="container header-content">
+
+            <!-- Logo -->
+            <a href="#home" class="logo">
+                Lander<span>.</span>
+            </a>
+
+            <!-- Nút menu trên điện thoại -->
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                type="button"
+                aria-label="Toggle navigation"
+                aria-controls="mainNav"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+            <!-- Navigation -->
+            <nav class="navigation" id="mainNav">
+                <a href="#home" class="nav-link active">HOME</a>
+                <a href="#about" class="nav-link">ABOUT</a>
+                <a href="#reviews" class="nav-link">REVIEWS</a>
+                <a href="#video" class="nav-link">VIDEO</a>
+                <a href="#features" class="nav-link">FEATURES</a>
+                <a href="#products" class="nav-link">PRODUCTS</a>
+                <a href="#faqs" class="nav-link">FAQS</a>
+                <a href="#contact" class="nav-link">CONTACT</a>
+            </nav>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- ========== HERO SECTION ========== -->
+        <section class="hero container" id="home">
+
+            <!-- Nội dung bên trái -->
+            <div class="hero-text">
+
+                <h1>
+                    Your Product<br>
+                    Landing Page
+                </h1>
+
+                <p>
+                    Write here about your product short description.
+                </p>
+
+                <a href="#contact" class="btn-order">
+                    ORDER NOW
+                </a>
+
+            </div>
+
+            <!-- Hình ảnh bên phải -->
+            <div class="hero-image" id="products">
+                <img
+                    src="./assets/products.png"
+                    alt="Shopping cart containing beauty products"
+                >
+            </div>
+
+        </section>
+
+
+        <!-- ========== WHY IS LANDER ========== -->
+        <section class="why-section container" id="about">
+
+            <h2>Why Is Lander?</h2>
+
+            <p class="section-description">
+                Lander is simply product landing page template for any products.
+                If you are searching for<br class="desktop-break">
+                product landing page to create sales, lander is perfect.
+            </p>
+
+
+            <!-- BENEFIT CARDS -->
+            <div class="benefit-grid" id="features">
+
+                <!-- CARD 1 -->
+                <article class="benefit-card">
+
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 48 48"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2.2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+
+                            <circle cx="24" cy="19" r="13"/>
+                            <path d="M20 32l4 5 4-5"/>
+                            <path d="M24 37v4"/>
+                            <path d="M25 10c5 0 8 3 8 8"/>
+                        </svg>
+                    </div>
+
+                    <h3>100% High Quality Product</h3>
+
+                    <p>
+                        We have option of pick up in store
+                    </p>
+
+                </article>
+
+
+                <!-- CARD 2 -->
+                <article class="benefit-card">
+
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 48 48"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2.2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+
+                            <path d="M13 18h22l3 20a5 5 0 0 1-5 5H15a5 5 0 0 1-5-5z"/>
+                            <path d="M18 18v-5a6 6 0 0 1 12 0v5"/>
+                            <circle cx="24" cy="29" r="5"/>
+                            <path d="M22 29l2 2 4-5"/>
+                        </svg>
+                    </div>
+
+                    <h3>Free Shipping Charge</h3>
+
+                    <p>
+                        Inside City delivery within 5 days
+                    </p>
+
+                </article>
+
+
+                <!-- CARD 3 -->
+                <article class="benefit-card">
+
+                    <div class="benefit-icon">
+                        <svg viewBox="0 0 48 48"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2.2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+
+                            <rect x="13" y="5"
+                                  width="22" height="38"
+                                  rx="9"
+                                  transform="rotate(45 24 24)"/>
+                            <path d="M13 13l22 22"/>
+                            <path d="M19 24h0M24 19h0M29 24h0M24 29h0"
+                                  stroke-width="4"/>
+                        </svg>
+                    </div>
+
+                    <h3>Money Back Guarantee</h3>
+
+                    <p>
+                        We will take return in some cases
+                    </p>
+
+                </article>
+
+            </div>
+        </section>
+
+
+        <!-- ========== CÁC MỤC BỔ SUNG ========== -->
+        <!-- Các mục dưới đây là placeholder để menu hoạt động.
+             Slide chỉ hiển thị mockup của Hero và Why Is Lander. -->
+
+        <section class="extra-sections container">
+
+            <div class="extra-card" id="reviews">
+                <h2>Reviews</h2>
+                <p>Customer reviews will be added here.</p>
+            </div>
+
+            <div class="extra-card" id="video">
+                <h2>Video</h2>
+                <p>Product demonstration video will be added here.</p>
+            </div>
+
+            <div class="extra-card" id="faqs">
+                <h2>FAQs</h2>
+                <p>Frequently asked questions will be added here.</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer" id="contact">
+
+        <div class="container footer-content">
+
+            <a href="#home" class="logo">
+                Lander<span>.</span>
+            </a>
+
+            <p>Product Landing Page Demo</p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="./main.js"></script>
+
+</body>
+</html>
