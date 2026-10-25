@@ -1,0 +1,57 @@
+
+// 1. Khai báo Variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$text-color: white;
+$font-main: Arial, sans-serif;
+$padding: 20px;
+$content-width: 800px;
+
+// 2. Header
+header {
+  background-color: $primary-color;
+  padding: $padding;
+  color: $text-color;
+  font-family: $font-main;
+  text-align: center;
+}
+
+// 3. Main Content
+.main-content {
+  max-width: $content-width;
+  margin: 0 auto;
+  padding: $padding;
+
+  p {
+    margin-bottom: $padding;
+  }
+
+  // 4. Button Container
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      color: $text-color;
+      cursor: pointer;
+      font-family: $font-main;
+      background-color: $primary-color;
+
+      // Secondary Button ghi đè màu mặc định
+      &.btn-secondary {
+        background-color: $secondary-color;
+      }
+    }
+  }
+}
+
+// 5. Footer
+footer {
+  background-color: $primary-color;
+  padding: $padding;
+  color: $text-color;
+  font-family: $font-main;
+  text-align: center;
+}
