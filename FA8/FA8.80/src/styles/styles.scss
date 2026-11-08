@@ -1,0 +1,38 @@
+@use 'sass:color';
+
+$product-color: lightblue;
+
+@function hover-effect($color) {
+  @return color.mix(white, $color, 30%);
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.product-catalog {
+  max-width: 600px;
+  margin: 50px auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .products {
+    list-style: none;
+    padding: 0;
+
+    .product {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s ease;
+
+      &:hover, &:focus-visible {
+        background-color: hover-effect($product-color);
+      }
+    }
+  }
+}
