@@ -1,0 +1,41 @@
+@import 'variables';
+
+body {
+  background-color: $primary-color;
+  font-family: Arial, sans-serif;
+}
+
+.product-catalog {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .product {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+}
+
+.button {
+  background-color: $secondary-color;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font: inherit;
+  cursor: pointer;
+}
