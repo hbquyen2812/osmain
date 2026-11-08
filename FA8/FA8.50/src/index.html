@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FA8.50 - Landing Page</title>
+</head>
+<body>
+  <header class="header" id="home">
+    <h1>Frontend Academy</h1>
+    <nav aria-label="Điều hướng chính">
+      <ul>
+        <li><a href="#home">Trang chủ</a></li>
+        <li><a href="#about">Giới thiệu</a></li>
+        <li><a href="#services">Dịch vụ</a></li>
+        <li><a href="#contact">Liên hệ</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h2>Bắt đầu hành trình lập trình web</h2>
+        <p>Học HTML, CSS và JavaScript qua những dự án thực tế.</p>
+        <a class="btn" href="#about">Tìm hiểu thêm</a>
+      </div>
+    </section>
+    <section class="about" id="about">
+      <div class="container">
+        <h2>Về chúng tôi</h2>
+        <p>Frontend Academy giúp bạn xây dựng nền tảng lập trình web, từng bước biến ý tưởng thành sản phẩm.</p>
+      </div>
+    </section>
+    <section class="services" id="services">
+      <div class="container">
+        <h2>Dịch vụ</h2>
+        <ul>
+          <li>Đào tạo lập trình web</li>
+          <li>Hướng dẫn dự án</li>
+          <li>Tư vấn lộ trình học</li>
+        </ul>
+      </div>
+    </section>
+    <section class="contact" id="contact">
+      <div class="container">
+        <h2>Liên hệ</h2>
+        <form>
+          <label for="name">Họ và tên</label>
+          <input id="name" name="name" autocomplete="name" required>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+          <label for="message">Nội dung</label>
+          <textarea id="message" name="message" rows="5" required></textarea>
+          <button type="submit">Gửi liên hệ</button>
+          <p id="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

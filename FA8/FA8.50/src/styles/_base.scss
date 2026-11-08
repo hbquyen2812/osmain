@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: $text-color;
+}
+
+.container {
+  width: calc(100% - 40px);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+input, textarea, button {
+  font-family: inherit;
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid $accent-color;
+  outline-offset: 4px;
+}

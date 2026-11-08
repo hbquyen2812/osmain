@@ -1,0 +1,22 @@
+.hero {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('../assets/hero.webp');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  text-align: center;
+  padding: $section-spacing 0;
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin: 0 0 20px;
+  }
+
+  p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    @include button-style($accent-color, $accent-hover);
+  }
+}

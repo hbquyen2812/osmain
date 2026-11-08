@@ -1,0 +1,16 @@
+.services {
+  @include section-layout;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  li {
+    font-size: 1.2rem;
+  }
+}
