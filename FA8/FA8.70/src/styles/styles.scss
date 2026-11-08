@@ -1,0 +1,50 @@
+$product-highlight-color: #f39c12;
+$price-threshold: 80;
+$product-info-list: 50, 70, 100;
+
+@function product-color($price) {
+  @if $price > $price-threshold {
+    @return $product-highlight-color;
+  }
+
+  @return inherit;
+}
+
+@mixin apply-prices($price-list) {
+  @each $price in $price-list {
+    &[data-price='#{$price}'] {
+      background-color: product-color($price);
+    }
+  }
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.product-catalog {
+  max-width: 600px;
+  margin: 50px auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .products {
+    list-style: none;
+    padding: 0;
+
+    .product {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      @include apply-prices($product-info-list);
+
+      &::after {
+        content: ' - $' attr(data-price);
+      }
+    }
+  }
+}
