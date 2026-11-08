@@ -1,0 +1,50 @@
+$discount-threshold: 80;
+$discount: 0.1;
+$product-info-list: 27, 70, 100;
+
+@function apply-discount($price) {
+  @if $price > $discount-threshold {
+    @return $price * (1 - $discount);
+  }
+
+  @return $price;
+}
+
+@mixin apply-prices($price-list) {
+  $index: 0;
+
+  @each $price in $price-list {
+    $index: $index + 1;
+
+    &:nth-child(#{$index})::after {
+      content: ' - $' + apply-discount($price);
+    }
+  }
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.product-catalog {
+  max-width: 600px;
+  margin: 50px auto;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .products {
+    list-style: none;
+    padding: 0;
+
+    .product {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      @include apply-prices($product-info-list);
+    }
+  }
+}
